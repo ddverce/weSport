@@ -46,7 +46,7 @@ class PlayerRegistrationForm(FlaskForm):
 
 
 class BookingForm(FlaskForm):
-    day = DateField('Day',
+    day = DateField('Days',
                     validators=[DataRequired()])
     start_hour = TimeField('Start',
                            validators=[DataRequired()])
