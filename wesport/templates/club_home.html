@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for field in fields %}
+        <div>
+            <h2><a class="article-title" href="#">{{ field.field_name }}</a></h2>
+            <p class="article-content">Sport: {{ field.sport }}</p>
+            <p class="article-content">Max Players: {{ field.max_people }}</p>
+        </div>
+    {% endfor %}
+{% endblock content %}

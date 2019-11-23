@@ -1,0 +1,15 @@
+# compiled python files
+*.pyc
+wesport/*.pyc
+/wesport/*.pyc
+wesport/route.pyc
+
+# profile pics
+wesport/static/profile_pics/*.*
+
+# db
+database/*.*
+
+
+.idea/
+.idea
