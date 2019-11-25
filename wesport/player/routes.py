@@ -47,7 +47,7 @@ def new_booking():
         if current_user.urole == 'Club':
             return redirect(url_for('club.club_home'))
         form = BookingForm()
-        form.club.choices = [(club.id, club.name) for club in Club.query.all()]
+        form.club.choices = [(club.id, club.name) for club in Club.query.all()] # we can add the fact that we display only the club of the city with the function get_city
         form.field.choices = [(field.id, field.field_name) for field in Field.query.all()]
     if form.validate_on_submit():
         '''

@@ -61,3 +61,27 @@ class BookingForm(FlaskForm):
         booking = Booking.query.filter_by(field_id=field.id, day=day, start=start_hour).first()
         if booking:
             raise ValidationError('This Time has already been booked for this field. Please choose another one')
+
+
+class FieldChoiceIterable(object):
+    def __iter__(self):
+        fields = Field.query.all()
+        choices = [(field.id, field.field_name) for field in fields]
+        for choice in choices:
+            yield choice
+
+
+class PlayerChoiceIterable(object):
+    def __iter__(self):
+        players = Player.query.all()
+        choices = [(player.id, '%s %s' % (player.name, player.surname)) for player in players]
+        for choice in choices:
+            yield choice
+
+
+class ClubChoiceIterable(object):
+    def __iter__(self):
+        clubs = Club.query.all() # possibility to add the city filter
+        choices = [(club.id, club.name) for club in clubs]
+        for choice in choices:
+            yield choice
