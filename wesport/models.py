@@ -94,11 +94,14 @@ class Field(db.Model):
 
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(64), nullable=False, unique=False)
     day = db.Column(db.DateTime, nullable=False)
-    start = db.Column(db.Time, nullable=False)
+    startTime = db.Column(db.Integer, nullable=False)
+    endTime = db.Column(db.Integer, nullable=False)  # should be calculated with startTime and duration
+    duration = db.Column(db.Integer, nullable=False)
     owner = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=False)
     field_id = db.Column(db.Integer, db.ForeignKey('field.id'), nullable=False)
-    player_list = db.Column(db.Integer, db.ForeignKey('participants.id'), nullable=False)
+    player_list = db.relationship('Players', backref='Booking', lazy=True)
 
     # How Bookings are printed when the object is called
     def __repr__(self):
