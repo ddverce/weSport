@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, DecimalField, IntegerField, TimeField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, DecimalField, IntegerField, TimeField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_login import current_user
 from wesport.models import User, Club, Player, Field, Booking
@@ -46,12 +46,15 @@ class PlayerRegistrationForm(FlaskForm):
 
 
 class BookingForm(FlaskForm):
-    day = DateField('Days',
-                    validators=[DataRequired()])
-    start_hour = TimeField('Start',
-                           validators=[DataRequired()])
-    field = StringField('Field',
+    title = StringField('Name Your event',
                         validators=[DataRequired()])
+    date = DateField('Select your Day', format='%d-%m-%Y',
+                     validators=[DataRequired()])
+    club = SelectField('Club', coerce=int, choices=[])
+    field = SelectField('Field', coerce=int, choices=[])
+    start_time = SelectField('Start time', coerce=int, choices=[(i, i) for i in range(9, 19)])
+    duration = SelectField('Select duration', coerce=int, choices=[(i, i) for i in range(1, 6)])
+    submit = SubmitField('Book')
 
     def validate_booking(self, day, start_hour, field):
         field = Field.query.filter_by(field_name=field).first

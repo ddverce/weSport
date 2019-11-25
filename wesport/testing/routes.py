@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from wesport import db, bcrypt
 from wesport.models import User, Post, Club, Player
-from wesport.testing.forms import (RegistrationForm, PlayerRegistrationForm, ClubRegistrationForm, LoginForm, CLubForm, UpdateAccountForm, UpdateClubForm, UpdatePlayerForm)
+from wesport.testing.forms import (RegistrationForm, PlayerRegistrationForm, ClubRegistrationForm, LoginForm, CLubForm, UpdateAccountForm, UpdateClubForm, UpdatePlayerForm, BookForm)
 from wesport.functions.users import save_picture, send_reset_email
 
 test = Blueprint('test', __name__)
@@ -145,3 +145,11 @@ def club_home():
 def player_home():
     return render_template('layout.html')
 '''
+
+
+@test.route("/test_booking", methods=['GET', 'POST'])
+def test_booking():
+    form = BookForm()
+    if form.validate_on_submit():
+        return redirect(url_for("main.about"))
+    return render_template('test_booking.html', form=form)

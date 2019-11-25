@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, DecimalField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, DecimalField, IntegerField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_login import current_user
 from wesport.models import User, Club, Player
@@ -199,3 +199,10 @@ class CLubForm(FlaskForm):
     matches = IntegerField('Number of matches played')
     image = FileField('Club Picture',
                       validators=[FileAllowed(['jpg', 'png'])])
+
+
+class BookForm(FlaskForm):
+    field = SelectField('Field', coerce=int, choices=[(0, 'Field-0'), (1, 'Field-1'), (2, 'Field_2')])
+    start_time = SelectField('Start time', coerce=int, choices=[(i,i) for i in range(9,19)])
+    duration = SelectField('Select duration', coerce=int,  choices=[(i,i) for i in range(1,6)])
+    submit = SubmitField('Book')

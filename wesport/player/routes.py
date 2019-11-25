@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from wesport import db, bcrypt
-from wesport.models import User, Post, Club, Player, Booking
+from wesport.models import User, Post, Club, Player, Booking, Field
 from wesport.player.forms import PlayerRegistrationForm, BookingForm
 from wesport.functions.users import save_picture, send_reset_email
 
@@ -39,14 +39,41 @@ def player_home():
     player = Player.query.filter_by(user_id=current_user.id).first()
     return render_template('player_home.html', player=player)
 
-'''
-@player.route("/new_booking")
+
+@player.route("/new_booking", methods=['GET', 'POST'])
 @login_required
 def new_booking():
-    if current_user.is_autenticated:
+    if current_user.is_authenticated:
         if current_user.urole == 'Club':
             return redirect(url_for('club.club_home'))
         form = BookingForm()
-        booking = Booking.query.all()
-        if form.validate_on_submit():
-'''
+        form.club.choices = [(club.id, club.name) for club in Club.query.all()]
+        form.field.choices = [(field.id, field.field_name) for field in Field.query.all()]
+    if form.validate_on_submit():
+        '''
+        # check time collision
+        meetingcollisions = Meeting.query.filter_by(date=datetime.combine(form.date.data, datetime.min.time())).filter_by(roomId=form.rooms.data).all()
+        print(len(meetingcollisions))
+        for meetingcollision in meetingcollisions:
+            # [a, b] overlaps with [x, y] iff b > x and a < y
+            if (form.startTime.data < meetingcollision.endTime and (form.startTime.data + form.duration.data) > meetingcollision.startTime):
+                flash(f'The time from {meetingcollision.startTime} to {meetingcollision.endTime} is already booked by {User.query.filter_by(id=meetingcollision.bookerId).first().fullname}.')
+                return redirect(url_for('book'))
+        '''
+        # make booking
+        booker = current_user
+
+        field = Field.query.filter_by(id=form.field.data).first()
+        # cost = room.cost
+        end_time = form.start_time.data + form.duration.data
+
+        # participants_user = form.participants_user.data
+        # participants_partner = form.participants_partner.data
+
+        booking = Booking(title=form.title.data, date=form.date.data, field_id=field.id, booker_id=booker.id, startTime=form.start_time.data, endTime=end_time, duration=form.duration.data)
+        db.session.add(booking)
+        db.session.commit()
+        flash('Booking processed with success!', 'success')
+
+        return redirect(url_for("player.player_home"))
+    return render_template('book.html', title='Book', form=form)
