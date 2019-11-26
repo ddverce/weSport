@@ -1,4 +1,11 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <h2>Hello {{ player.name}}, {{ player.surname }} !</h2>
+    <h2>Hello {{ player.name}}, {{ player.surname }} !</h2> <br>
+    {% for booking in bookings %}
+        <div>
+            <h2><a class="article-title" href="#">Event : {{  booking.title }}</a></h2>
+            <p class="article-content">Date: {{ booking.date }}</p>
+            <p class="article-content">Start Time: {{ booking.startTime }}</p>
+        </div>
+    {% endfor %}
 {% endblock content %}

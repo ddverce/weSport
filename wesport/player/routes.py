@@ -4,6 +4,7 @@ from wesport import db, bcrypt
 from wesport.models import User, Post, Club, Player, Booking, Field
 from wesport.player.forms import PlayerRegistrationForm, BookingForm
 from wesport.functions.users import save_picture, send_reset_email
+from datetime import datetime
 
 player = Blueprint('player', __name__)
 
@@ -37,7 +38,8 @@ def player_home():
         if current_user.urole == 'Club':
             return redirect(url_for('club.club_home'))
     player = Player.query.filter_by(user_id=current_user.id).first()
-    return render_template('player_home.html', player=player)
+    bookings = Booking.query.filter_by(booker_id=current_user.id)
+    return render_template('player_home.html', player=player, bookings=bookings)
 
 
 @player.route("/new_booking", methods=['GET', 'POST'])
@@ -50,16 +52,17 @@ def new_booking():
         form.club.choices = [(club.id, club.name) for club in Club.query.all()]  # we can add the fact that we display only the club of the city with the function get_city
         form.field.choices = [(field.id, field.field_name) for field in Field.query.all()]
     if form.validate_on_submit():
-        '''
+
         # check time collision
-        meetingcollisions = Meeting.query.filter_by(date=datetime.combine(form.date.data, datetime.min.time())).filter_by(roomId=form.rooms.data).all()
-        print(len(meetingcollisions))
-        for meetingcollision in meetingcollisions:
+        bookingcollisions = Booking.query.filter_by(date=datetime.combine(form.date.data, datetime.min.time())).filter_by(field_id=form.field.data).all()
+        print(len(bookingcollisions))
+        for bookingcollision in bookingcollisions:
             # [a, b] overlaps with [x, y] iff b > x and a < y
-            if (form.startTime.data < meetingcollision.endTime and (form.startTime.data + form.duration.data) > meetingcollision.startTime):
-                flash(f'The time from {meetingcollision.startTime} to {meetingcollision.endTime} is already booked by {User.query.filter_by(id=meetingcollision.bookerId).first().fullname}.')
-                return redirect(url_for('book'))
-        '''
+            if form.start_time.data < bookingcollision.endTime and (form.start_time.data + form.duration.data) > bookingcollision.startTime:
+                flash('The time from is already booked.', 'danger')
+                print (bookingcollision.startTime, bookingcollision.endTime) # Player.query.filter_by(id=bookingcollision.booker_id).first().name, Player.query.filter_by(id=bookingcollision.booker_id).first().surname)
+                return redirect(url_for('player.new_booking'))
+
         # make booking
         booker = current_user
 
