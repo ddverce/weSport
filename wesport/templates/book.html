@@ -83,6 +83,19 @@
                             {{ form.duration(class="form-control form-control-lg") }}
                         {% endif %}
                     </div>
+                    <div class="form-group">
+                        {{ form.players.label(class="form-control-label") }}
+                        {% if form.players.errors %}
+                           {{ form.players(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.players.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.players(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
                 </fieldset>
                 <div class="form-group">
                     {{ form.submit(class="btn btn-outline-info") }}

@@ -62,7 +62,7 @@ class Club(db.Model):
     field = db.relationship('Field', backref='club', lazy=True)
 
     def __repr__(self):
-        return "User(%s, %s)" % (self.name, self.address)
+        return "Club(%s, %s)" % (self.name, self.address)
 
 
 class Player(db.Model):
@@ -76,9 +76,10 @@ class Player(db.Model):
     subscription_date = db.Column(db.Date, nullable=False, default=datetime.utcnow)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    booking = db.relationship('Booking', backref='booker', lazy=True)
 
     def __repr__(self):
-        return "User(%s, %s, %s)" % (self.name, self.surname, self.subscription_date)
+        return "Player(%s, %s, %s)" % (self.name, self.surname, self.subscription_date)
 
 
 class Field(db.Model):
@@ -87,9 +88,11 @@ class Field(db.Model):
     sport = db.Column(db.String(20), unique=False, nullable=False)
     max_people = db.Column(db.Integer, unique=False, nullable=True)
     club_id = db.Column(db.Integer, db.ForeignKey('club.id'), nullable=False)
+    booking = db.relationship('Booking', backref='field', lazy=True)
 
     def __repr__(self):
-        return "Field(%s, %s, %s)" % (self.club_id, self.field_name, self.sport)
+        club = Club.query.filter_by(id=self.club_id).first()
+        return "Field(%s, %s, %s)" % (club.name, self.field_name, self.sport)
 
 
 class Booking(db.Model):
@@ -101,7 +104,6 @@ class Booking(db.Model):
     duration = db.Column(db.Integer, nullable=False)
     booker_id = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=False)
     field_id = db.Column(db.Integer, db.ForeignKey('field.id'), nullable=False)
-    player_list = db.relationship('Player', backref='Booking', lazy=True)
 
     # How Bookings are printed when the object is called
     def __repr__(self):
@@ -110,5 +112,9 @@ class Booking(db.Model):
 
 class Participants(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    booking = db.Column(db.Integer, db.ForeignKey('booking.id'), primary_key=True)
-    player = db.Column(db.Integer, db.ForeignKey('player.id'), primary_key=True)
+    booking = db.Column(db.Integer, db.ForeignKey('booking.id'))
+    player = db.Column(db.Integer, db.ForeignKey('player.id'))
+    event = db.relationship('Booking', backref='booking', lazy=True)
+
+    def __repr__(self):
+        return "Participants(%s, %s)" % (self.booking, self.player)

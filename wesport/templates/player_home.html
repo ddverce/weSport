@@ -1,11 +1,24 @@
 {% extends 'layout.html' %}
 {% block content %}
     <h2>Hello {{ player.name}}, {{ player.surname }} !</h2> <br>
-    {% for booking in bookings %}
-        <div>
-            <h2><a class="article-title" href="#">Event : {{  booking.title }}</a></h2>
-            <p class="article-content">Date: {{ booking.date }}</p>
-            <p class="article-content">Start Time: {{ booking.startTime }}</p>
-        </div>
-    {% endfor %}
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">My Bookings</legend>
+        {% for booking in bookings %}
+            <div>
+                <h2><a class="article-title" href="{{  url_for('player.event', event_id=booking.id) }}" target="_blank">Event : {{  booking.title }}</a></h2>
+                <p class="article-content">Date: {{ booking.date }}</p>
+                <p class="article-content">Start Time: {{ booking.startTime }}</p>
+            </div>
+        {% endfor %}
+    </fieldset>
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">My Events</legend>
+        {% for event in events %}
+            <div>
+                <h2><a class="article-title" href="{{  url_for('player.event', event_id=event.id) }}" target="_blank">Event : {{  event.title }}</a></h2>
+                <p class="article-content">Date: {{ event.date }}</p>
+                <p class="article-content">Start Time: {{ event.startTime }}</p>
+            </div>
+        {% endfor %}
+    </fieldset>
 {% endblock content %}

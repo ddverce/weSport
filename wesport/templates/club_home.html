@@ -1,10 +1,25 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for field in fields %}
-        <div>
-            <h2><a class="article-title" href="#">{{ field.field_name }}</a></h2>
-            <p class="article-content">Sport: {{ field.sport }}</p>
-            <p class="article-content">Max Players: {{ field.max_people }}</p>
-        </div>
-    {% endfor %}
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Your fields</legend>
+        {% for field in fields %}
+            <div>
+                <h2><a class="article-title" href="#">{{ field.field_name }}</a></h2>
+                <p class="article-content">Sport: {{ field.sport }}</p>
+                <p class="article-content">Max Players: {{ field.max_people }}</p>
+            </div>
+        {% endfor %}
+    </fieldset>
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Your Bookings</legend>
+        {% for booking in bookings %}
+            <div>
+                <h2><a class="article-title" href="{{  url_for('club.booking', booking_id=booking.id) }}" target="_blank">{{ booking.field_name}}</a></h2>
+                <p class="article-content">Date : {{ booking.date }}</p>
+                <p class="article-content">From : {{ booking.startTime }}</p>
+                <p class="article-content">To : {{ booking.endTime }}</p>
+
+            </div>
+        {% endfor %}
+    </fieldset>
 {% endblock content %}

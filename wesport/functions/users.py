@@ -4,6 +4,7 @@ from PIL import Image
 from flask import url_for
 from flask_mail import Message
 from wesport import app, mail
+import unicodedata
 
 
 def save_picture(form_picture):
@@ -31,4 +32,35 @@ def send_reset_email(user):
 If you did not make this request, then simply ignore this email and non changes will be made
 
 ''' % url_for('main.reset_token', token=token, _external=True)
+    mail.send(msg)
+
+
+def send_cancellation_email(name, surname, field, date, start_time, receiver):  # to be checked the email
+    name = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore')
+    surname = unicodedata.normalize('NFKD', surname).encode('ascii', 'ignore')
+    field = unicodedata.normalize('NFKD', field).encode('ascii', 'ignore')
+    start_time = str(start_time)
+    receiver = unicodedata.normalize('NFKD', receiver).encode('ascii', 'ignore')
+    msg = Message('Booking cancellation',
+                  sender=app.config.get("MAIL_USERNAME"),
+                  recipients=[receiver])
+    msg.body = '''The user %s %s has just canceled a booking. the booking was made for %s the %s at %s
+
+''' % (name, surname, field, date, start_time)
+    print msg.body
+    mail.send(msg)
+
+
+def send_cancellation_email_club(club, field, date, start_time, receiver):  # to be checked the email
+    name = unicodedata.normalize('NFKD', club).encode('ascii', 'ignore')
+    field = unicodedata.normalize('NFKD', field).encode('ascii', 'ignore')
+    start_time = str(start_time)
+    receiver = unicodedata.normalize('NFKD', receiver).encode('ascii', 'ignore')
+    msg = Message('Booking cancellation',
+                  sender=app.config.get("MAIL_USERNAME"),
+                  recipients=[receiver])
+    msg.body = '''The user %s has just canceled a booking. the booking was made for %s the %s at %s
+
+''' % (club, field, date, start_time)
+    print msg.body
     mail.send(msg)

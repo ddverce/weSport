@@ -1,9 +1,10 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from wesport import db, bcrypt
-from wesport.models import User, Post, Club, Player, Field
+from wesport.models import User, Post, Club, Player, Field, Booking, Participants
 from wesport.club.forms import ClubRegistrationForm, AddFieldForm
-from wesport.functions.users import save_picture, send_reset_email
+from wesport.functions.users import save_picture, send_reset_email, send_cancellation_email_club
+from datetime import datetime
 
 club = Blueprint('club', __name__)
 
@@ -37,7 +38,10 @@ def club_home():
             return redirect(url_for('player.player_home'))
     club = Club.query.filter_by(user_id=current_user.id).first()
     fields = Field.query.filter_by(club_id=club.id)
-    return render_template('club_home.html', fields=fields)
+    bookings = Booking.query.join(Field, Booking.field_id==Field.id).join(Player, Booking.booker_id==Player.id)\
+        .add_columns(Booking.id, Booking.date, Booking.startTime, Booking.endTime, Field.club_id, Field.field_name, Player.name)\
+        .filter(Field.club_id==club.id).all()
+    return render_template('club_home.html', fields=fields, bookings=bookings)
 
 
 @club.route("/add_field", methods=['GET', 'POST'])
@@ -55,3 +59,45 @@ def add_field():
         flash('Your field has been added!', 'success')
         return redirect(url_for('club.club_home'))
     return render_template('add_field.html', title='Add Field', form=form)
+
+
+@club.route("/booking/<int:booking_id>")
+@login_required
+def booking(booking_id):
+    booking = Booking.query.get_or_404(booking_id)
+    print booking
+    return render_template('booking.html', title=booking.title, booking=booking)
+
+
+@club.route('/booking/<int:booking_id>/cancel', methods=['POST'])
+@login_required
+def cancel(booking_id):  # to be tested
+    booking = Booking.query.get_or_404(booking_id)
+    # verify no date constraints
+
+    if booking.date <= datetime.now():
+        flash('Past booking cannot be canceled', 'info')
+        return redirect(url_for('player.player_home'))
+
+    # eliminate participants of the eliminated booking
+
+    participants_user = Participants.query.filter_by(booking=booking.id).all()
+    for part in participants_user:
+        db.session.delete(part)
+    '''
+    # eliminate cost log
+
+    costlog = CostLog.query.filter_by(title=meeting.title).first()
+    db.session.delete(costlog)
+    '''
+    # send email to club to notify that the event has been deleted
+    player = Player.query.filter_by(user_id=booking.booker_id).first()
+    field = Field.query.filter_by(id=booking.field_id).first()
+    club = Club.query.filter_by(club_id=current_user.id).first()
+    player_user = User.query.filter_by(id=player.id).first()
+    print (player.name, player.surname, field.field_name, booking.date, booking.startTime, player_user.email)
+    send_cancellation_email_club(club.name, field.field_name, booking.date.strftime("%d/%m/%y"), booking.startTime, player_user.email)
+    db.session.delete(booking)
+    db.session.commit()
+    flash('Your booking has been deleted!', 'success')
+    return redirect(url_for('player.player_home'))
