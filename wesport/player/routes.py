@@ -41,7 +41,8 @@ def player_home():
     bookings = Booking.query.filter_by(booker_id=current_user.id)
     events = db.session.query(Booking).join(Participants)\
         .add_columns(Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.id)\
-        .filter(Participants.player==player.id).all()
+        .filter(Participants.player == player.id).all()
+    
     return render_template('player_home.html', player=player, bookings=bookings, events=events)
 
 
@@ -103,15 +104,15 @@ def new_booking():
 @player.route("/event/<int:event_id>")
 def event(event_id):
     booking = Booking.query.get_or_404(event_id)
-    booker = Player.query.filter_by(id=booking.booker_id).first()
-    return render_template('event.html', title=booking.title, booking=booking, booker=booker.user_id)
+    booker = User.query.filter_by(id=booking.booker_id).first()
+    return render_template('event.html', title=booking.title, booking=booking, booker=booker.id)
 
 
 @player.route('/event/<int:event_id>/cancel', methods=['POST'])
 @login_required
 def cancel(event_id):
     booking = Booking.query.get_or_404(event_id)
-    if booking.booker_id != Player.query.filter_by(user_id=current_user.id).first().id:
+    if booking.booker_id != User.query.filter_by(id=current_user.id).first().id:
         abort(403)
 
     # verify no date constraints

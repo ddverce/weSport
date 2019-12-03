@@ -21,4 +21,14 @@
             </div>
         {% endfor %}
     </fieldset>
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Public events</legend>
+        {% for booking in bookings %}
+            <div>
+                <h2><a class="article-title" href="{{  url_for('player.event', event_id=booking.id) }}" target="_blank">Event : {{  booking.title }}</a></h2>
+                <p class="article-content">Date: {{ booking.date }}</p>
+                <p class="article-content">Start Time: {{ booking.startTime }}</p>
+            </div>
+        {% endfor %}
+    </fieldset>
 {% endblock content %}

@@ -52,7 +52,7 @@ def send_cancellation_email(name, surname, field, date, start_time, receiver):  
 
 
 def send_cancellation_email_club(club, field, date, start_time, receiver):  # to be checked the email
-    name = unicodedata.normalize('NFKD', club).encode('ascii', 'ignore')
+    club = unicodedata.normalize('NFKD', club).encode('ascii', 'ignore')
     field = unicodedata.normalize('NFKD', field).encode('ascii', 'ignore')
     start_time = str(start_time)
     receiver = unicodedata.normalize('NFKD', receiver).encode('ascii', 'ignore')

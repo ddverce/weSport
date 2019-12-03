@@ -66,6 +66,8 @@ class BookingForm(FlaskForm):
         if booking:
             raise ValidationError('This Time has already been booked for this field. Please choose another one')
     '''
+    ''' # to be fixed and to be replaced by javascript dynamic field
+    
     def validate_field(self, club, field):  # not working to be finished
         print field.data
         print club.data
@@ -73,7 +75,7 @@ class BookingForm(FlaskForm):
         club_field = Club.query.filter_by(id=field_data.club_id).first()
         if club.data != club_field.id:
             raise ValidationError('This Field does not belong to the club chosen. Please choose another one')
-
+    '''
 
 class FieldChoiceIterable(object):
     def __iter__(self):
