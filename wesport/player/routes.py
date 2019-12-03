@@ -1,5 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
 from flask_login import login_user, current_user, logout_user, login_required
+from sqlalchemy import func
+
 from wesport import db, bcrypt
 from wesport.models import User, Post, Club, Player, Booking, Field, Participants
 from wesport.player.forms import PlayerRegistrationForm, BookingForm
@@ -38,12 +40,27 @@ def player_home():
         if current_user.urole == 'Club':
             return redirect(url_for('club.club_home'))
     player = Player.query.filter_by(user_id=current_user.id).first()
-    bookings = Booking.query.filter_by(booker_id=current_user.id)
-    events = db.session.query(Booking).join(Participants)\
+    bookings = Booking.query.filter_by(booker_id=current_user.id).all()
+    bookings_query = db.session.query(Booking).filter_by(booker_id=current_user.id).add_columns(Booking.id).all() # query to pass the booking.ids to exclude in the public event
+    bookings_id = []  # list of ids of my bookings
+    for booking in bookings_query:
+        bookings_id.append(booking[1])
+    myevents = db.session.query(Booking).join(Participants)\
+        .add_columns(Booking.id, Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.booker_id)\
+        .filter(Participants.player == player.id).filter(current_user.id != Booking.booker_id)\
+        .all()
+    myevents_id = []  # list of ids of the event i have already joined
+    for event in myevents:
+        myevents_id.append(event[1])
+    events = db.session.query(Booking, Participants, Field)\
         .add_columns(Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.id)\
-        .filter(Participants.player == player.id).all()
-    
-    return render_template('player_home.html', player=player, bookings=bookings, events=events)
+        .filter(Booking.id == Participants.booking).filter(Booking.field_id == Field.id)\
+        .filter(Booking.id.notin_(myevents_id))\
+        .filter(Booking.id.notin_(bookings_id))\
+        .filter(Booking.date > datetime.now())\
+        .group_by(Booking.id)\
+        .having(func.count(Participants.player) < Field.max_people).all()
+    return render_template('player_home.html', player=player, bookings=bookings, myevents=myevents, events=events)
 
 
 @player.route("/new_booking", methods=['GET', 'POST'])
@@ -104,8 +121,43 @@ def new_booking():
 @player.route("/event/<int:event_id>")
 def event(event_id):
     booking = Booking.query.get_or_404(event_id)
+    player_user = Player.query.filter_by(user_id=current_user.id).first()
+    participants = Participants.query.filter_by(booking=booking.id).all()
+    player_status = 0
+    for part in participants:
+        if player_user.id == part.player:
+            player_status = 1
     booker = User.query.filter_by(id=booking.booker_id).first()
-    return render_template('event.html', title=booking.title, booking=booking, booker=booker.id)
+    return render_template('event.html', title=booking.title, booking=booking, booker=booker.id, player_status=player_status)
+
+
+@player.route("/event/<int:event_id>/join", methods=['POST'])
+@login_required
+def join(event_id):
+    booking = Booking.query.get_or_404(event_id)
+    player_user = Player.query.filter_by(user_id=current_user.id).first()
+    participants = Participants.query.filter_by(booking=booking.id).all()
+    for part in participants:
+        if player_user.id == part.player:
+            flash('You are already part of this event', 'info')
+            return redirect(url_for('player.player_home'))
+    player_join = Participants(booking=booking.id, player=player_user.id)
+    db.session.add(player_join)
+    db.session.commit()
+    flash('You join this event. Have Fun!', 'success')
+    return redirect(url_for('player.player_home'))
+
+
+@player.route("/event/<int:event_id>/leave", methods=['POST'])
+@login_required
+def leave(event_id):
+    booking = Booking.query.get_or_404(event_id)
+    player_user = Player.query.filter_by(user_id=current_user.id).first()
+    participant = Participants.query.filter_by(booking=booking.id, player=player_user.id).first()
+    db.session.delete(participant)
+    db.session.commit()
+    flash('You left the event!', 'success')
+    return redirect(url_for('player.player_home'))
 
 
 @player.route('/event/<int:event_id>/cancel', methods=['POST'])

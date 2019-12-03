@@ -2,11 +2,25 @@
 {% block content %}
     <h1>{{ booking.title }}</h1>
     <div class="article-metadata">
-          {% if booker == current_user.id %}
-              <div>
+        {% if booker == current_user.id %}
+            <div>
                 <button type=button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
-              </div>
-          {% endif %}
+            </div>
+        {% else %}
+            {% if player_status == 0 %}
+            <div>
+                <form action="{{ url_for('player.join', event_id=booking.id) }}" method="POST">
+                    <input type="submit" value="Join" />
+                </form>
+            </div>
+        {% else %}
+            <div>
+                <form action="{{ url_for('player.leave', event_id=booking.id) }}" method="POST">
+                    <input type="submit" value="Leave" />
+                </form>
+            </div>
+        {% endif %}
+        {% endif %}
     </div>
      <!-- Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
