@@ -32,6 +32,19 @@
                         {% endif %}
                     </div>
                     <div class="form-group">
+                        {{ form.sport.label(class="form-control-label") }}
+                        {% if form.sport.errors %}
+                           {{ form.sport(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.sport.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.sport(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
                         {{ form.club.label(class="form-control-label") }}
                         {% if form.club.errors %}
                            {{ form.club(class="form-control form-control-lg is-invalid") }}
@@ -101,5 +114,44 @@
                     {{ form.submit(class="btn btn-outline-info") }}
                 </div>
             </form>
+            <script>
+                let sport_select = document.getElementById('sport');
+                let club_select = document.getElementById('club');
+                let field_select = document.getElementById('field');
+
+                sport_select.onchange = function () {
+                    sport = sport_select.value;
+
+                    fetch('/clubs/' + sport).then(function (response) {
+                        response.json().then(function (data) {
+                            let optionHTML = '';
+
+                            for (let club of data.clubs) {
+                                optionHTML += '<option value="' + club.id + '">' + club.name + '</option>';
+                            }
+                            club_select.innerHTML = optionHTML;
+
+                        });
+                    });
+                }
+
+                club_select.onchange = function () {
+                    club = club_select.value;
+                    sport = sport_select.value
+
+                    fetch('/field/' + club + '/' + sport).then(function (response) {
+                        response.json().then(function (data) {
+                            let optionHTML = '';
+
+                            for (let field of data.fields) {
+                                optionHTML += '<option value="' + field.id + '">' + field.name + '</option>';
+                            }
+                            field_select.innerHTML = optionHTML;
+
+                        });
+                    });
+                }
+            </script>
         </div>
 {% endblock content %}
+

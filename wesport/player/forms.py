@@ -48,8 +48,7 @@ class PlayerRegistrationForm(FlaskForm):
 class BookingForm(FlaskForm):
     title = StringField('Name Your event',
                         validators=[DataRequired()])
-    date = DateField('Select your Day', format='%d-%m-%Y',
-                     validators=[DataRequired()])
+    sport = SelectField('Sport', choices=[('Football', 'Football'), ('Basketball', 'Basketball'), ('Volleyball', 'Volleyball'), ('Paddle', 'Paddle')])
     club = SelectField('Club', coerce=int, choices=[])
     field = SelectField('Field', coerce=int, choices=[])
     start_time = SelectField('Start time', coerce=int, choices=[(i, i) for i in range(9, 19)])
@@ -66,6 +65,8 @@ class BookingForm(FlaskForm):
         if booking:
             raise ValidationError('This Time has already been booked for this field. Please choose another one')
     '''
+    date = DateField('Select your Day', format='%d-%m-%Y',
+                     validators=[DataRequired()])
     ''' # to be fixed and to be replaced by javascript dynamic field
     
     def validate_field(self, club, field):  # not working to be finished

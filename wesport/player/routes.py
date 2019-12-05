@@ -1,7 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import func
-
 from wesport import db, bcrypt
 from wesport.models import User, Post, Club, Player, Booking, Field, Participants
 from wesport.player.forms import PlayerRegistrationForm, BookingForm
@@ -35,6 +34,7 @@ def player_register():
 
 
 @player.route("/player_home")
+@login_required
 def player_home():
     if current_user.is_authenticated:
         if current_user.urole == 'Club':

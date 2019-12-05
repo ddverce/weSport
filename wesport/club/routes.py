@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
+from flask import render_template, url_for, flash, redirect, request, Blueprint, abort, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from wesport import db, bcrypt
 from wesport.models import User, Post, Club, Player, Field, Booking, Participants
@@ -40,7 +40,8 @@ def club_home():
     fields = Field.query.filter_by(club_id=club.id)
     bookings = Booking.query.join(Field, Booking.field_id==Field.id).join(User, Booking.booker_id == User.id).join(Player, User.id == Player.user_id)\
         .add_columns(Booking.id, Booking.date, Booking.startTime, Booking.endTime, Field.club_id, Field.field_name, Player.name)\
-        .filter(Field.club_id == club.id).all()
+        .filter(Field.club_id == club.id)\
+        .filter(Booking.date > datetime.now()).all()
     return render_template('club_home.html', fields=fields, bookings=bookings)
 
 
@@ -102,3 +103,35 @@ def cancel_booking(booking_id):  # to be tested
     db.session.commit()
     flash('Your booking has been deleted!', 'success')
     return redirect(url_for('player.player_home'))
+
+
+@club.route('/clubs/<sport>')  # route needed fot java script select field only of the appropriate club
+def clubs(sport):
+    fields = Field.query.filter_by(sport=sport).all()
+
+    club_list = []
+
+    for field in fields:
+        clubObj = {}
+        clubObj['id'] = field.club_id
+        clubObj['name'] = Club.query.filter_by(id=field.club_id).first().name
+        club_list.append(clubObj)
+
+    return jsonify({'clubs': club_list})
+
+
+@club.route('/field/<club_id>/<sport>')  # route needed fot java script select field only of the appropriate club
+def field(club_id, sport):
+    fields = Field.query.filter_by(club_id=club_id, sport=sport).all()
+    print fields
+
+    field_list = []
+
+    for field in fields:
+        fieldObj = {}
+        fieldObj['id'] = field.id
+        fieldObj['name'] = field.field_name
+        field_list.append(fieldObj)
+
+    return jsonify({'fields': field_list})
+

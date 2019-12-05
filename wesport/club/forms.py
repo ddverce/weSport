@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, DecimalField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, DecimalField, IntegerField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_login import current_user
 from wesport.models import User, Club, Player
@@ -56,8 +56,7 @@ class ClubRegistrationForm(FlaskForm):
 class AddFieldForm(FlaskForm):
     field_name = StringField('Field Name',
                              validators=[DataRequired(), Length(min=2, max=20)])
-    sport = StringField('Type of Sport',
-                        validators=[DataRequired(), Length(min=2, max=20)])
+    sport = SelectField('Sport', choices=[('Football', 'Football'), ('Basketball', 'Basketball'), ('Volleyball', 'Volleyball'), ('Paddle', 'Paddle')])
     max_people = IntegerField('Max Number of Player',
                               validators=[DataRequired()])
     submit = SubmitField('AddField')
