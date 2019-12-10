@@ -4,7 +4,7 @@ from sqlalchemy import func
 from wesport import db, bcrypt
 from wesport.models import User, Post, Club, Player, Booking, Field, Participants
 from wesport.player.forms import PlayerRegistrationForm, BookingForm
-from wesport.functions.users import save_picture, send_reset_email, send_cancellation_email
+from wesport.functions.users import save_picture, send_reset_email, send_cancellation_email, get_city
 from datetime import datetime
 
 player = Blueprint('player', __name__)
@@ -66,13 +66,18 @@ def player_home():
 @player.route("/new_booking", methods=['GET', 'POST'])
 @login_required
 def new_booking():
+    lat, lon = get_city()
+    markers = [[45.0719075, 7.6431117], [45.0601674, 7.6354696]]
+    print markers
     if current_user.is_authenticated:
         if current_user.urole == 'Club':
             return redirect(url_for('club.club_home'))
         player_booker = Player.query.filter_by(user_id=current_user.id).first()
         form = BookingForm()
-        form.club.choices = [(club.id, club.name) for club in Club.query.all()]  # we can add the fact that we display only the club of the city with the function get_city
-        form.field.choices = [(field.id, field.field_name) for field in Field.query.all()]
+        club_choices = [('0', '--select option--')]+[(club.id, club.name) for club in Club.query.all()]
+        field_choices = [('0', '--select option--')]+[(field.id, field.field_name) for field in Field.query.all()]
+        form.club.choices = club_choices  # we can add the fact that we display only the club of the city with the function get_city
+        form.field.choices = field_choices
         form.players.choices = [(player.id, '%s %s' % (player.name, player.surname)) for player in Player.query.filter(Player.id != player_booker.id).all()]
     if form.validate_on_submit():
 
@@ -115,7 +120,7 @@ def new_booking():
         flash('Booking processed with success!', 'success')
 
         return redirect(url_for("player.player_home"))
-    return render_template('book.html', title='Book', form=form)
+    return render_template('book.html', title='Book', form=form, lat=lat, lon=lon, markers=markers)
 
 
 @player.route("/event/<int:event_id>")
