@@ -82,9 +82,6 @@ def get_city():
     return lat, lon
 
 
-a, b = get_city()
-
-
 def geocode(address):  # needed for both saving the coordinates of the address and also to search the locations near me
     access_key = 'AIzaSyBCNB6dLAqToK9fbYsZKIHxreBLPGcn9so'
     send_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
@@ -95,6 +92,15 @@ def geocode(address):  # needed for both saving the coordinates of the address a
     return lat, lng
 
 
-addr = 'via washington 11, milano'
-
-lat, lng = geocode(addr)
+def googledistance(lat_or, lng_or, lat_dest, lng_dest):
+    access_key = 'AIzaSyBCNB6dLAqToK9fbYsZKIHxreBLPGcn9so'
+    send_url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&'
+    r = requests.get(send_url + 'origins=' + str(lat_or) + ',' + str(lng_or) + '&destinations=' + str(lat_dest) + ',' + str(lng_dest) + '&key=' + access_key)
+    j = json.loads(r.text)
+    output = {
+                'distance_text' : j['rows'][0]['elements'][0]['distance']['text'],
+                'distance_value' : j['rows'][0]['elements'][0]['distance']['value'],
+                'duration_text' : j['rows'][0]['elements'][0]['distance']['text'],
+                'duration_value' : j['rows'][0]['elements'][0]['distance']['text']
+            }
+    return output

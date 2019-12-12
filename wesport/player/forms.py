@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, DecimalField, IntegerField, TimeField, SelectField, SelectMultipleField, widgets
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, DecimalField, IntegerField, TimeField, SelectField, SelectMultipleField, widgets, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_login import current_user
 from wesport.models import User, Club, Player, Field, Booking
@@ -19,13 +19,14 @@ class PlayerRegistrationForm(FlaskForm):
                        validators=[DataRequired()])
     surname = StringField('Surname',
                           validators=[DataRequired()])
-    gender = StringField('Gender',
-                         validators=[DataRequired()])
+    country = StringField('Country of Origin',
+                          validators=[DataRequired()])
+    gender = SelectField('Gender', choices=[('Male', 'Male'), ('Female', 'Female')])
     phone_number = StringField('Phone',
                                validators=[DataRequired()])
     address = StringField('Address',
                           validators=[DataRequired()])
-    birthdate = DateField('Birthdate', format='%d-%m-%Y',
+    birthdate = DateField('Birthdate', format='%Y-%m-%d',
                           validators=[DataRequired()])
     submit = SubmitField('Sign Up')
 
@@ -50,7 +51,7 @@ class BookingForm(FlaskForm):
                         validators=[DataRequired()])
     date = DateField('Select your Day', format='%Y-%m-%d',
                      validators=[DataRequired()])
-    sport = SelectField('Sport', choices=[('0', '--select option--'), ('Football', 'Football'), ('Basketball', 'Basketball'), ('Volleyball', 'Volleyball'), ('Paddle', 'Paddle')])
+    sport = SelectField('Sport', choices=[('0', '---select option---'), ('Football', 'Football'), ('Basketball', 'Basketball'), ('Volleyball', 'Volleyball'), ('Paddle', 'Paddle')])
     club = SelectField('Club', coerce=int, choices=[])
     field = SelectField('Field', coerce=int, choices=[])
     start_time = SelectField('Start time', coerce=int, choices=[(i, i) for i in range(9, 19)])
@@ -77,6 +78,19 @@ class BookingForm(FlaskForm):
         if club.data != club_field.id:
             raise ValidationError('This Field does not belong to the club chosen. Please choose another one')
     '''
+
+
+class CurrentAddressForm(FlaskForm):
+    city = StringField('Your city',
+                        validators=[DataRequired()])
+    address = StringField('Your current address',
+                          validators=[DataRequired()])
+    submit = SubmitField('Find nearest clubs')
+
+
+class PostForm(FlaskForm):
+    content = TextAreaField('', validators=[DataRequired()])
+    submit = SubmitField('Send')
 
 
 class FieldChoiceIterable(object):

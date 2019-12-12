@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-        <div id="map"></div><br>
         <div class="content-section">
             <form method="post" action="">
                 {{ form.hidden_tag() }}
@@ -107,7 +106,7 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            <ul class="form-group" value={{ form.players(class="form-control form-control-lg") }}
+                            {{ form.players }}
                         {% endif %}
                     </div>
                 </fieldset>
@@ -153,47 +152,94 @@
                     });
                 }
             </script>
-            <script> // to be modified and improved
-                var lat = {{ lat }};
-                  var lon = {{ lon }};
-                  var markers = {{ markers }};
-                  var marker, i;
-                  var map;
-                  var infowindow = new google.maps.InfoWindow();
-
-                  function initMap() {
-
-                      // Map Options
-                      var options = {
-                          center: {lat: lat, lng: lon},
-                          zoom: 12
-                      };
-
-                      // New map
-                      map = new google.maps.Map(document.getElementById('map'), options);
-
-                      // add multiple markers
-                      for (i = 0; i < markers.length; i++) {
-                          marker = new google.maps.Marker({
-                              position: new google.maps.LatLng(markers[i][0], markers[i][1]),
-                              map: map
-                          });
-
-                          google.maps.event.addListener(marker, 'click', (function(marker) {
-                          return function() {
-                              var infoWindow = new google.maps.InfoWindow({
-                                    content:props.content
-                              });
-
-                              marker.addListener('click', function(){
-                                    infoWindow.open(map, marker);
-                              });
-                          }
-                          })(marker));
-                      }
-                  }
-            </script>
-            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNB6dLAqToK9fbYsZKIHxreBLPGcn9so&callback=initMap" async defer></script>
         </div>
 {% endblock content %}
+{% block right_content %}
+    <h4>Club Map</h4>
+        <div id="map"></div>
+        <script> // to be modified and improved
+              var lat = {{ lat }};
+              var lon = {{ lon }};
+              var markers = {{ markers }};
+              var marker, i;
+              var map;
+              var infowindow = new google.maps.InfoWindow();
+
+              function initMap() {
+
+                  // Map Options
+                  var options = {
+                      center: {lat: lat, lng: lon},
+                      zoom: 13
+                  };
+
+                  // New map
+                  map = new google.maps.Map(document.getElementById('map'), options);
+
+                  // add multiple markers
+                  for (i = 0; i < markers.length; i++) {
+                      marker = new google.maps.Marker({
+                          position: new google.maps.LatLng(markers[i][0], markers[i][1]),
+                          map: map
+                      });
+
+                      google.maps.event.addListener(marker, 'click', (function(marker) {
+                      return function() {
+                          var infoWindow = new google.maps.InfoWindow({
+                                content:props.content
+                          });
+
+                          marker.addListener('click', function(){
+                                infoWindow.open(map, marker);
+                          });
+                      }
+                      })(marker));
+                  }
+              }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNB6dLAqToK9fbYsZKIHxreBLPGcn9so&callback=initMap" async defer></script>
+        <form method="post" action="">
+            {{ address.hidden_tag() }}
+            <fieldset class="form-group">
+                {% if latlon == 'nolocation' %}
+                {% else %}
+                    <legend class="border-bottom mb-4">Clubs closer to you</legend>
+                        <ul>
+                            {% for club in near_club %}
+                                <li>{{ club.name }} , {{ club.distance }}m</li>
+                            {% endfor %}
+                        </ul>
+                {% endif %}
+                <div class="form-group">
+                    {{ address.city.label(class="form-control-label") }}
+                    {% if address.city.errors %}
+                       {{ address.city(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in address.city.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ address.city(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ address.address.label(class="form-control-label") }}
+                    {% if address.address.errors %}
+                       {{ address.address(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in address.address.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ address.address(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ address.submit(class="btn btn-outline-info") }}
+                </div>
+            </fieldset>
+        </form>
+{% endblock %}
 

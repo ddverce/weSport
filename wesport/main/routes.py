@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
-from wesport.models import Post, User
+from wesport.models import Post, User, Player, Club
 from wesport import db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
 from wesport.main.forms import LoginForm, RequestResetForm, ResetPasswordForm, UpdateAccountForm
@@ -11,9 +11,7 @@ main = Blueprint('main', __name__)
 @main.route("/")
 @main.route("/home")
 def home():
-    page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=2)
-    return render_template('home.html', posts=posts)
+    return render_template('home.html')
 
 
 @main.route("/about")
@@ -58,11 +56,17 @@ def logout():
 @main.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
+    if current_user.urole == 'Club':
+        user = Club.query.filter_by(user_id=current_user.id).first()
+    else:
+        user = Player.query.filter_by(user_id=current_user.id).first()
+    print current_user, current_user.urole, current_user.id
+    print user
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
-            current_user.image_file = picture_file
+            user.image_file = picture_file
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
@@ -71,7 +75,7 @@ def account():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    image_file = url_for('static', filename='profile_pics/' + user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
 

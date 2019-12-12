@@ -15,8 +15,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     urole = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
-    posts = db.relationship('Post', backref='author', lazy=True)
     clubs = db.relationship('Club', backref='club_user', lazy=True)
     player = db.relationship('Player', backref='player-user', lazy=True)
 
@@ -34,19 +32,7 @@ class User(db.Model, UserMixin):
             return None
 
     def __repr__(self):
-        return "User(%s, %s, %s, %s)" % (self.username, self.email, self.urole, self.image_file)
-
-
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    content = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    def __repr__(self):
-        content = "Post(%s , %s)" % (self.title, self.date_posted)
-        return content.encode("urf-8")
+        return "User(%s, %s, %s)" % (self.username, self.email, self.urole)
 
 
 class Club(db.Model):
@@ -55,11 +41,14 @@ class Club(db.Model):
     phone_number = db.Column(db.String(20), unique=True, nullable=False)
     city = db.Column(db.String(60), nullable=False)
     address = db.Column(db.String(60), nullable=False)
+    lat = db.Column(db.Float(10), nullable=False)
+    lon = db.Column(db.Float(10), nullable=False)
     piva = db.Column(db.String(20), unique=True, nullable=False)
     subscription_date = db.Column(db.Date, nullable=False, default=datetime.utcnow)
-    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    image_file = db.Column(db.String(20), nullable=False, default='default_club.jpg')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    field = db.relationship('Field', backref='club', lazy=True)
+    field = db.relationship('Field', backref='club_field', lazy=True)
+    rating = db.relationship('ClubRate', backref='club_rate', lazy=True)
 
     def __repr__(self):
         return "Club(%s, %s)" % (self.name, self.address)
@@ -70,6 +59,7 @@ class Player(db.Model):
     name = db.Column(db.String(60), nullable=False)
     surname = db.Column(db.String(60), nullable=False)
     gender = db.Column(db.String(10), nullable=False)
+    country = db.Column(db.String(20), nullable=False)
     phone_number = db.Column(db.String(20), unique=True, nullable=False)
     address = db.Column(db.String(60), nullable=False)
     birthdate = db.Column(db.Date, nullable=False)
@@ -77,6 +67,8 @@ class Player(db.Model):
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     booking = db.relationship('Booking', backref='booker', lazy=True)
+    post = db.relationship('Post', backref='player_post', lazy=True)
+    rating = db.relationship('PlayerRate', backref='player_rate', lazy=True)
 
     def __repr__(self):
         return "Player(%s, %s, %s)" % (self.name, self.surname, self.subscription_date)
@@ -104,6 +96,7 @@ class Booking(db.Model):
     duration = db.Column(db.Integer, nullable=False)
     booker_id = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=False)
     field_id = db.Column(db.Integer, db.ForeignKey('field.id'), nullable=False)
+    post = db.relationship('Post', backref='booking', lazy=True)
 
     # How Bookings are printed when the object is called
     def __repr__(self):
@@ -115,6 +108,33 @@ class Participants(db.Model):
     booking = db.Column(db.Integer, db.ForeignKey('booking.id'))
     player = db.Column(db.Integer, db.ForeignKey('player.id'))
     event = db.relationship('Booking', backref='booking', lazy=True)
+    player_link = db.relationship('Player', backref='player', lazy=True)
 
     def __repr__(self):
         return "Participants(%s, %s)" % (self.booking, self.player)
+
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    content = db.Column(db.Text, nullable=False)
+    player_id = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=False)
+    event = db.Column(db.Integer, db.ForeignKey('booking.id'), nullable=False)
+
+    def __repr__(self):
+        content = "Post(%s , %s)" % (self.title, self.date_posted)
+        return content.encode("urf-8")
+
+
+class ClubRate(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    rate = db.Column(db.Integer, nullable=False)
+    club = db.Column(db.Integer, db.ForeignKey('club.id'))
+    player = db.Column(db.Integer, db.ForeignKey('player.id'))
+
+
+class PlayerRate(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    rate = db.Column(db.Integer, nullable=False)
+    club = db.Column(db.Integer, db.ForeignKey('club.id'))
+    player = db.Column(db.Integer, db.ForeignKey('player.id'))

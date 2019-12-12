@@ -82,8 +82,22 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.surname
-                            (class="form-control form-control-lg") }}
+                            {{ form.surname(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.country.label(class="form-control-label") }}
+                        {% if form.country.errors %}
+                           {{ form.country
+                           (class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.country
+                                .errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.country(class="form-control form-control-lg") }}
                         {% endif %}
                     </div>
                     <div class="form-group">
@@ -138,7 +152,7 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.birthdate(class="form-control form-control-lg") }}
+                            <input type="date" value={{ form.birthdate(class="form-control form-control-lg") }}
                         {% endif %}
                     </div>
                 </fieldset>

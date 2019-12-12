@@ -3,9 +3,10 @@ from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import func
 from wesport import db, bcrypt
 from wesport.models import User, Post, Club, Player, Booking, Field, Participants
-from wesport.player.forms import PlayerRegistrationForm, BookingForm
-from wesport.functions.users import save_picture, send_reset_email, send_cancellation_email, get_city
+from wesport.player.forms import PlayerRegistrationForm, BookingForm, CurrentAddressForm, PostForm
+from wesport.functions.users import save_picture, send_reset_email, send_cancellation_email, get_city, geocode, googledistance
 from datetime import datetime
+import ast
 
 player = Blueprint('player', __name__)
 
@@ -25,7 +26,7 @@ def player_register():
         db.session.commit()
         u = User.query.filter_by(email=form.email.data).first()
         player = Player(name=form.name.data, surname=form.surname.data, gender=form.gender.data, phone_number=form.phone_number.data,
-                        address=form.address.data, birthdate=form.birthdate.data, user_id=u.id)
+                        address=form.address.data, country=form.country.data, birthdate=form.birthdate.data, user_id=u.id)
         db.session.add(player)
         db.session.commit()
         flash('Your registration has been completed!', 'success')
@@ -42,40 +43,62 @@ def player_home():
     player = Player.query.filter_by(user_id=current_user.id).first()
     bookings = Booking.query.filter_by(booker_id=current_user.id).all()
     bookings_query = db.session.query(Booking).filter_by(booker_id=current_user.id).add_columns(Booking.id).all() # query to pass the booking.ids to exclude in the public event
+    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname, Player.image_file)\
+        .filter(Participants.player == Player.id)
+    fields = Field.query.all()
+    clubs = Club.query.all()
     bookings_id = []  # list of ids of my bookings
     for booking in bookings_query:
         bookings_id.append(booking[1])
     myevents = db.session.query(Booking).join(Participants)\
-        .add_columns(Booking.id, Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.booker_id)\
+        .add_columns(Booking.id, Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.booker_id, Booking.field_id)\
         .filter(Participants.player == player.id).filter(current_user.id != Booking.booker_id)\
         .all()
     myevents_id = []  # list of ids of the event i have already joined
     for event in myevents:
         myevents_id.append(event[1])
     events = db.session.query(Booking, Participants, Field)\
-        .add_columns(Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.id)\
+        .add_columns(Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.id, Booking.field_id)\
         .filter(Booking.id == Participants.booking).filter(Booking.field_id == Field.id)\
         .filter(Booking.id.notin_(myevents_id))\
         .filter(Booking.id.notin_(bookings_id))\
         .filter(Booking.date > datetime.now())\
         .group_by(Booking.id)\
         .having(func.count(Participants.player) < Field.max_people).all()
-    return render_template('player_home.html', player=player, bookings=bookings, myevents=myevents, events=events)
+    image_file = url_for('static', filename='profile_pics/' + player.image_file)
+    return render_template('player_home.html', title='Home', player=player, bookings=bookings, participants=participants, myevents=myevents, events=events,
+                           fields=fields, clubs=clubs, image_file=image_file)
 
 
-@player.route("/new_booking", methods=['GET', 'POST'])
+@player.route("/new_booking/<location>", methods=['GET', 'POST'])
 @login_required
-def new_booking():
-    lat, lon = get_city()
-    markers = [[45.0719075, 7.6431117], [45.0601674, 7.6354696]]
+def new_booking(location):  # i need to pass a parameter because i need to pass the latlon coordinates to query the club. if i don't have coord i pass nolocation
+    clubs = Club.query.all()
+    near_club = []
+    markers = []
+    if location == 'nolocation':
+        latlon = location
+        lat, lon = get_city()  # used to center the map in the city i'm in. it doesn't work very well
+    else:
+        latlon = ast.literal_eval(location)  # used to convert the string parameter location into a dictionary
+        lat = latlon['lat']
+        lon = latlon['lon']
+        for club in clubs:
+            output = googledistance(lat, lon, club.lat, club.lon)
+            if output['distance_value'] < 5000:
+                near_club.append({'name': club.name, 'distance': output['distance_value']})
+        near_club.sort(key=lambda k: k['distance'])
+        print near_club
+    for club in clubs:  # sample marker to pass to the map
+        markers.append([club.lat, club.lon])
     print markers
     if current_user.is_authenticated:
         if current_user.urole == 'Club':
             return redirect(url_for('club.club_home'))
         player_booker = Player.query.filter_by(user_id=current_user.id).first()
         form = BookingForm()
-        club_choices = [('0', '--select option--')]+[(club.id, club.name) for club in Club.query.all()]
-        field_choices = [('0', '--select option--')]+[(field.id, field.field_name) for field in Field.query.all()]
+        club_choices = [('0', '---select option---')]+[(club.id, club.name) for club in Club.query.all()]
+        field_choices = [('0', '---select option---')]+[(field.id, field.field_name) for field in Field.query.all()]
         form.club.choices = club_choices  # we can add the fact that we display only the club of the city with the function get_city
         form.field.choices = field_choices
         form.players.choices = [(player.id, '%s %s' % (player.name, player.surname)) for player in Player.query.filter(Player.id != player_booker.id).all()]
@@ -120,20 +143,40 @@ def new_booking():
         flash('Booking processed with success!', 'success')
 
         return redirect(url_for("player.player_home"))
-    return render_template('book.html', title='Book', form=form, lat=lat, lon=lon, markers=markers)
+    address = CurrentAddressForm()
+    mylocation = {'lat': 45, 'lon': 45}  # initialize the dict for location
+    if address.validate_on_submit():
+        mylocation['lat'], mylocation['lon'] = geocode(address.address.data + ',' + address.city.data)  # pass the latlon coordinates if submitted
+        return redirect(url_for('player.new_booking', location=mylocation))
+    return render_template('book.html', title='Book', form=form, lat=lat, lon=lon, markers=markers, address=address, latlon=latlon, near_club=near_club)
 
 
-@player.route("/event/<int:event_id>")
+@player.route("/event/<int:event_id>", methods=['GET', 'POST'])
 def event(event_id):
+    posts = db.session.query(Post, Player).add_columns(Post.id, Post.event, Post.date_posted, Post.content, Player.name, Player.surname, Player.image_file)\
+        .filter(Post.player_id == Player.id).filter(Post.event == event_id)
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(player_id=Player.query.filter_by(user_id=current_user.id).first().id, event=event_id, content=form.content.data)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post has been created!', 'success')
+        return redirect(url_for('player.event', event_id=event_id))
+    print posts
     booking = Booking.query.get_or_404(event_id)
     player_user = Player.query.filter_by(user_id=current_user.id).first()
     participants = Participants.query.filter_by(booking=booking.id).all()
+    players = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname, Player.image_file) \
+        .filter(Participants.player == Player.id).filter(Participants.booking == event_id)
+    field = Field.query.filter_by(id=booking.field_id).first()
+    club = Club.query.filter_by(id=field.club_id).first()
     player_status = 0
     for part in participants:
         if player_user.id == part.player:
             player_status = 1
     booker = User.query.filter_by(id=booking.booker_id).first()
-    return render_template('event.html', title=booking.title, booking=booking, booker=booker.id, player_status=player_status)
+    return render_template('event.html', title=booking.title, booking=booking, booker=booker.id, player_status=player_status, posts=posts,
+                           players=players, club=club, field=field, form=form)
 
 
 @player.route("/event/<int:event_id>/join", methods=['POST'])

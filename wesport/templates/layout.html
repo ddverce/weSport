@@ -8,14 +8,15 @@
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 50%;
+        height: 200px;
+        width: 300px;
       }
-      /* Optional: Makes the sample page fill the window. */
+      /* Optional: Makes the sample page fill the window.
       html, body {
         height: 100%;
         margin: 0;
         padding: 0;
-      }
+      }*/
     </style>
 
     <!-- Bootstrap CSS -->
@@ -33,26 +34,25 @@
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-          <a class="navbar-brand mr-4" href="/">Wesport</a>
+            {% if current_user.is_authenticated %}
+                    {% if current_user.urole == 'Player' %}
+                        <a class="navbar-brand mr-4"  href="{{ url_for('player.player_home') }}">Wesport</a>
+                    {% else %}
+                        <a class="navbar-brand mr-4" " href="{{ url_for('club.club_home') }}">Wesport</a>
+                    {% endif %}
+            {% else %}
+                <a class="navbar-brand mr-4" href="/">Wesport</a>
+            {% endif %}
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Home</a>
-              <a class="nav-item nav-link" href="{{ url_for('main.about') }}">About</a>
-              <a class="nav-item nav-link" href="https://www.google.com/maps" target="_blank">Google Maps</a>
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
-                    {% if current_user.urole == 'Player' %}
-                        <a class="nav-item nav-link" href="{{ url_for('player.player_home') }}">PlayerHome</a>
-                    {% else %}
-                        <a class="nav-item nav-link" href="{{ url_for('club.club_home') }}">ClubHome</a>
-                    {% endif %}
-                    <a class="nav-item nav-link" href="{{ url_for('posts.new_post') }}">New Post</a>
-                    <a class="nav-item nav-link" href="{{ url_for('main.account') }}">Account</a>
+                    <a class="nav-item nav-link" href="{{ url_for('main.about') }}">About</a>
                     <a class="nav-item nav-link" href="{{ url_for('main.logout') }}">Logout</a>
                 {% else %}
                     <a class="nav-item nav-link" href="{{ url_for('main.login') }}">Login</a>
@@ -64,7 +64,7 @@
       </nav>
     </header>
     <main role="main" class="container">
-      <div class="row">
+      <div class="row">  <!--container to set where the flash messages arte displayed-->
         <div class="col-md-8">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -75,35 +75,11 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            {% block content %}{% endblock %}
+            {% block content %}{% endblock %} <!--main page content block-->
         </div>
         <div class="col-md-4">
           <div class="content-section">
-            <h3>Our Sidebar</h3>
-            <p class='text-muted'>You can put any information here you'd like.
-              <ul class="list-group">
-                {% if current_user.is_authenticated %}
-                    {% if current_user.urole == 'Club' %}
-                        <a class="list-group-item list-group-item-light" href="{{ url_for('club.add_field') }}">Add Field</a>
-                        <li class="list-group-item list-group-item-light">Latest Posts</li>
-                        <li class="list-group-item list-group-item-light">Announcements</li>
-                        <li class="list-group-item list-group-item-light">Calendars</li>
-                        <li class="list-group-item list-group-item-light">etc</li>
-                    {% else %}
-                        <a class="list-group-item list-group-item-light" href="{{ url_for('player.new_booking') }}">New Booking</a>
-                        <li class="list-group-item list-group-item-light">Latest Posts</li>
-                        <li class="list-group-item list-group-item-light">Announcements</li>
-                        <li class="list-group-item list-group-item-light">Calendars</li>
-                        <li class="list-group-item list-group-item-light">etc</li>
-                    {% endif %}
-                {% else %}
-                    <li class="list-group-item list-group-item-light">Latest Posts</li>
-                    <li class="list-group-item list-group-item-light">Announcements</li>
-                    <li class="list-group-item list-group-item-light">Calendars</li>
-                    <li class="list-group-item list-group-item-light">etc</li>
-                {% endif %}
-              </ul>
-            </p>
+              {% block right_content %}{% endblock %} <!--right side page content block-->
           </div>
         </div>
       </div>

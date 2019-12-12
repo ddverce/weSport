@@ -3,7 +3,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from wesport import db, bcrypt
 from wesport.models import User, Post, Club, Player, Field, Booking, Participants
 from wesport.club.forms import ClubRegistrationForm, AddFieldForm
-from wesport.functions.users import save_picture, send_reset_email, send_cancellation_email_club
+from wesport.functions.users import save_picture, send_reset_email, send_cancellation_email_club, geocode
 from datetime import datetime
 
 club = Blueprint('club', __name__)
@@ -19,11 +19,12 @@ def club_register():
     form = ClubRegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        lat, lon = geocode(form.address.data + ',' + form.city.data)
         user = User(username=form.username.data, email=form.email.data, password=hashed_password, urole="Club")
         db.session.add(user)
         db.session.commit()
         u = User.query.filter_by(email=form.email.data).first()
-        club = Club(name=form.name.data, phone_number=form.phone_number.data, address=form.address.data, piva=form.piva.data, city=form.city.data, user_id=u.id)
+        club = Club(name=form.name.data, phone_number=form.phone_number.data, address=form.address.data, lat=lat, lon=lon, piva=form.piva.data, city=form.city.data, user_id=u.id)
         db.session.add(club)
         db.session.commit()
         flash('Your registration has been completed!', 'success')
@@ -42,7 +43,8 @@ def club_home():
         .add_columns(Booking.id, Booking.date, Booking.startTime, Booking.endTime, Field.club_id, Field.field_name, Player.name)\
         .filter(Field.club_id == club.id)\
         .filter(Booking.date > datetime.now()).all()
-    return render_template('club_home.html', fields=fields, bookings=bookings)
+    image_file = url_for('static', filename='profile_pics/' + club.image_file)
+    return render_template('club_home.html', fields=fields, bookings=bookings, image_file=image_file)
 
 
 @club.route("/add_field", methods=['GET', 'POST'])
