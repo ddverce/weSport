@@ -1,3 +1,79 @@
 {% extends "layout.html" %}
 {% block content %}
+    {% if current_user.is_authenticated==false %}
+        <div>
+            <h1><b>No more excuses not to play sports! </b></h1>
+            <h2>Already xxx users and xx clubs are part of our community in all regions of Italy!</h2>
+
+            <img class="mySlides" src="../static/home_images/batigol_fiore.jpg"
+                 alt="Batigol" title="Batigol" width=500px>
+            <img class="mySlides" src="../static/home_images/rosina_toro.jpg"
+                 alt="Rosina" title="Rosina" width=500px>
+            <img class="mySlides" src="../static/home_images/real-juve-del-piero.jpg"
+                 alt="Pinturicchio" title="Pinturicchio" width=500px>
+            <img class="mySlides" src="../static/home_images/libertadores_2018_river_campeon.jpg"
+                 alt="River" title="El mas grande" width=500px>
+            <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+            <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+
+            <script>
+                var slideIndex = 1;
+                showDivs(slideIndex);
+
+                function plusDivs(n) {
+                  showDivs(slideIndex += n);
+                }
+
+                function showDivs(n) {
+                  var i;
+                  var x = document.getElementsByClassName("mySlides");
+                  if (n > x.length) {slideIndex = 1}
+                  if (n < 1) {slideIndex = x.length}
+                  for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                  }
+                  x[slideIndex-1].style.display = "block";
+                }
+            </script>
+
+
+            <!--<div class="w3-content w3-display-container">
+                <style>
+                    .mySlides {display:none;
+                    overflow: hidden;
+                    position: static;}
+
+                </style>
+                <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+                    <img class="mySlides" src="../home_images/batigol_fiore.jpg" style="width:100%">
+                    <img class="mySlides" src="/home_images/rosina_toro.jpg" style="width:100%">
+                    <img class="mySlides" src="/home_images/real-juve-del-piero.jpg" style="width:100%">
+                    <img class="mySlides" src="/home_images/libertadores_2018_river_campeon.jpg" style="width:100%">
+                    <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+                    <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+
+            </div>
+            <script>
+            var slideIndex = 1;
+            showDivs(slideIndex);
+
+            function plusDivs(n) {
+              showDivs(slideIndex += n);
+            }
+
+            function showDivs(n) {
+              var i;
+              var x = document.getElementsByClassName("mySlides");
+              if (n > x.length) {slideIndex = 1}
+              if (n < 1) {slideIndex = x.length}
+              for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+              }
+              x[slideIndex-1].style.display = "block";
+            }
+            </script>-->
+
+        </div>
+    {% endif %}
 {% endblock content %}
