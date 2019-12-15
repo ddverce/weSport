@@ -1,20 +1,68 @@
 {% extends "layout.html" %}
 {% block content %}
     {% if current_user.is_authenticated==false %}
-        <div>
+
             <h1><b>No more excuses not to play sports! </b></h1>
             <h2>Already xxx users and xx clubs are part of our community in all regions of Italy!</h2>
-
+            <div class="container">
             <img class="mySlides" src="../static/home_images/batigol_fiore.jpg"
-                 alt="Batigol" title="Batigol" width=500px>
+                 alt="Batigol" title="Batigol" width="400px">
             <img class="mySlides" src="../static/home_images/rosina_toro.jpg"
-                 alt="Rosina" title="Rosina" width=500px>
+                 alt="Rosina" title="Rosina">
             <img class="mySlides" src="../static/home_images/real-juve-del-piero.jpg"
-                 alt="Pinturicchio" title="Pinturicchio" width=500px>
+                 alt="Pinturicchio" title="Pinturicchio">
             <img class="mySlides" src="../static/home_images/libertadores_2018_river_campeon.jpg"
-                 alt="River" title="El mas grande" width=500px>
-            <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
-            <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+                 alt="River" title="El mas grande">
+            <button class="btn-left" onclick="plusDivs(-1)">&#10094;</button>
+            <button class="btn-right" onclick="plusDivs(1)">&#10095;</button>
+            <style>
+                .container {
+                  position: relative;
+                  width: 100%;
+                  max-width: 1125px;
+                }
+
+                .container img {
+                  width: 100%;
+                  height: auto;
+                }
+
+                .container .btn-left {
+                  position: absolute;
+                  top: 50%;
+                  left: 2.5%;
+                  transform: translate(-50%, -50%);
+                  -ms-transform: translate(-50%, -50%);
+                  background-color: #555;
+                  color: white;
+                  font-size: 16px;
+                  padding: 12px 24px;
+                  border: none;
+                  cursor: pointer;
+                  border-radius: 5px;
+                  text-align: center;
+                }
+
+                .container .btn-right {
+                  position: absolute;
+                  top: 50%;
+                  left: 97.5%;
+                  transform: translate(-50%, -50%);
+                  -ms-transform: translate(-50%, -50%);
+                  background-color: #555;
+                  color: white;
+                  font-size: 16px;
+                  padding: 12px 24px;
+                  border: none;
+                  cursor: pointer;
+                  border-radius: 5px;
+                  text-align: center;
+                }
+
+                .container .btn-right:hover,.btn-left:hover {
+                  background-color: black;
+                }
+            </style>
 
             <script>
                 var slideIndex = 1;
@@ -35,45 +83,7 @@
                   x[slideIndex-1].style.display = "block";
                 }
             </script>
-
-
-            <!--<div class="w3-content w3-display-container">
-                <style>
-                    .mySlides {display:none;
-                    overflow: hidden;
-                    position: static;}
-
-                </style>
-                <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-
-                    <img class="mySlides" src="../home_images/batigol_fiore.jpg" style="width:100%">
-                    <img class="mySlides" src="/home_images/rosina_toro.jpg" style="width:100%">
-                    <img class="mySlides" src="/home_images/real-juve-del-piero.jpg" style="width:100%">
-                    <img class="mySlides" src="/home_images/libertadores_2018_river_campeon.jpg" style="width:100%">
-                    <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
-                    <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
-
             </div>
-            <script>
-            var slideIndex = 1;
-            showDivs(slideIndex);
 
-            function plusDivs(n) {
-              showDivs(slideIndex += n);
-            }
-
-            function showDivs(n) {
-              var i;
-              var x = document.getElementsByClassName("mySlides");
-              if (n > x.length) {slideIndex = 1}
-              if (n < 1) {slideIndex = x.length}
-              for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-              }
-              x[slideIndex-1].style.display = "block";
-            }
-            </script>-->
-
-        </div>
     {% endif %}
 {% endblock content %}
