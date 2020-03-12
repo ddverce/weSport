@@ -122,10 +122,9 @@ def clubs(sport):
     return jsonify({'clubs': club_list})
 
 
-@club.route('/field/<club_id>/<sport>')  # route needed fot java script select field only of the appropriate club
+@club.route('/field/<club_id>/<sport>')  # route needed fot java script select field only of the appropriate club. problem with special characters
 def field(club_id, sport):
     fields = Field.query.filter_by(club_id=club_id, sport=sport).all()
-    print fields
 
     field_list = []
 
@@ -134,6 +133,7 @@ def field(club_id, sport):
         fieldObj['id'] = field.id
         fieldObj['name'] = field.field_name
         field_list.append(fieldObj)
+        print field.field_name
 
     return jsonify({'fields': field_list})
 

@@ -76,6 +76,7 @@ def new_booking(location):  # i need to pass a parameter because i need to pass 
     clubs = Club.query.all()
     near_club = []
     markers = []
+    contents = []
     if location == 'nolocation':
         latlon = location
         lat, lon = get_city()  # used to center the map in the city i'm in. it doesn't work very well
@@ -90,8 +91,10 @@ def new_booking(location):  # i need to pass a parameter because i need to pass 
         near_club.sort(key=lambda k: k['distance'])
         print near_club
     for club in clubs:  # sample marker to pass to the map
-        markers.append([club.lat, club.lon])
+        markers.append([club.lat, club.lon, club.id])
+        contents.append({'name': club.name, 'id': club.id})
     print markers
+    print contents
     if current_user.is_authenticated:
         if current_user.urole == 'Club':
             return redirect(url_for('club.club_home'))
@@ -148,7 +151,7 @@ def new_booking(location):  # i need to pass a parameter because i need to pass 
     if address.validate_on_submit():
         mylocation['lat'], mylocation['lon'] = geocode(address.address.data + ',' + address.city.data)  # pass the latlon coordinates if submitted
         return redirect(url_for('player.new_booking', location=mylocation))
-    return render_template('book.html', title='Book', form=form, lat=lat, lon=lon, markers=markers, address=address, latlon=latlon, near_club=near_club)
+    return render_template('book.html', title='Book', form=form, lat=lat, lon=lon, markers=markers, address=address, latlon=latlon, near_club=near_club, contents=contents)
 
 
 @player.route("/event/<int:event_id>", methods=['GET', 'POST'])

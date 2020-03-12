@@ -61,7 +61,7 @@ def send_cancellation_email_club(club, field, date, start_time, receiver):  # to
     msg = Message('Booking cancellation',
                   sender=app.config.get("MAIL_USERNAME"),
                   recipients=[receiver])
-    msg.body = '''The user %s has just canceled a booking. the booking was made for %s the %s at %s
+    msg.body = '''The club %s has just canceled a booking. the booking was made for %s the %s at %s
 
 ''' % (club, field, date, start_time)
     print msg.body

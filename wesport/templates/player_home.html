@@ -46,7 +46,7 @@
                         {% endfor %}
                     {% endif %}
                 {% endfor %}
-                <p class="article-content">Date: {{ event.date.strftime("%d-%m-Y") }}</p>
+                <p class="article-content">Date: {{ event.date.strftime("%d-%m-%Y") }}</p>
                 <p class="article-content">Start Time: {{ event.startTime }}</p>
                 {% for participants in participants %}
                     {% if participants.booking == event.id %}
@@ -75,7 +75,7 @@
                         {% endfor %}
                     {% endif %}
                 {% endfor %}
-                <p class="article-content">Date: {{ event.date.strftime("%d-%m-Y") }}</p>
+                <p class="article-content">Date: {{ event.date.strftime("%d-%m-%Y") }}</p>
                 <p class="article-content">Start Time: {{ event.startTime }}</p>
                 {% for participants in participants %}
                     {% if participants.booking == event.id %}
