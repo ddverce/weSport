@@ -4,7 +4,7 @@
         <legend class="border-bottom mb-4">Your fields</legend>
         {% for field in fields %}
             <div>
-                <h2><a class="article-title" href="#">{{ field.field_name }}</a></h2>
+                <h2><a class="article-title" href="{{  url_for('club.myfield', field_id=field.id) }}" target="_blank">{{ field.field_name }}</a></h2>
                 <p class="article-content">Sport: {{ field.sport }}</p>
                 <p class="article-content">Max Players: {{ field.max_people }}</p>
             </div>
@@ -14,7 +14,8 @@
         <legend class="border-bottom mb-4">Your Bookings</legend>
         {% for booking in bookings %}
             <div>
-                <h2><a class="article-title" href="{{  url_for('club.booking', booking_id=booking.id) }}" target="_blank">{{ booking.field_name}}</a></h2>
+                <h2><a class="article-title" href="{{  url_for('club.booking', booking_id=booking.id) }}" target="_blank">{{ booking.title}}</a></h2>
+                <p class="article-content">{{ booking.field_name}}</p>
                 <p class="article-content">Date : {{ booking.date.strftime("%d-%m-%Y") }}</p>
                 <p class="article-content">From {{ booking.startTime }} to {{ booking.endTime }}</p>
             </div>
@@ -27,6 +28,7 @@
             <img class="rounded-circle account-img" src="{{ image_file }}">
             <div class="media-body">
               <h2 class="account-heading">{{current_user.username}}</h2>
+              <p class="text-secondary">{{ club.name }}</p>
               <p class="text-secondary">{{ current_user.email }}</p>
             </div>
         </div>

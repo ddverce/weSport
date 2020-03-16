@@ -3,9 +3,11 @@
     <h1>{{ booking.title }}</h1>
     <div class="article-metadata">
         {% if booker == current_user.id %}
-            <div>
-                <button type=button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
-            </div>
+            {% if booking.date >= time_now %}
+                <div>
+                    <button type=button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+                </div>
+            {% endif %}
         {% else %}
             {% if player_status == 0 %}
             <div>

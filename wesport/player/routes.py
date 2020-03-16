@@ -41,8 +41,10 @@ def player_home():
         if current_user.urole == 'Club':
             return redirect(url_for('club.club_home'))
     player = Player.query.filter_by(user_id=current_user.id).first()
-    bookings = Booking.query.filter_by(booker_id=current_user.id).all()
-    bookings_query = db.session.query(Booking).filter_by(booker_id=current_user.id).add_columns(Booking.id).all() # query to pass the booking.ids to exclude in the public event
+    bookings = Booking.query.filter_by(booker_id=current_user.id)\
+                .filter(Booking.date > datetime.now()) \
+                .all()
+    bookings_query = db.session.query(Booking).filter_by(booker_id=current_user.id).add_columns(Booking.id).all()  # query to pass the booking.ids to exclude in the public event
     participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname, Player.image_file)\
         .filter(Participants.player == Player.id)
     fields = Field.query.all()
@@ -52,7 +54,8 @@ def player_home():
         bookings_id.append(booking[1])
     myevents = db.session.query(Booking).join(Participants)\
         .add_columns(Booking.id, Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.booker_id, Booking.field_id)\
-        .filter(Participants.player == player.id).filter(current_user.id != Booking.booker_id)\
+        .filter(Participants.player == player.id).filter(current_user.id != Booking.booker_id) \
+        .filter(Booking.date > datetime.now()) \
         .all()
     myevents_id = []  # list of ids of the event i have already joined
     for event in myevents:
@@ -65,9 +68,16 @@ def player_home():
         .filter(Booking.date > datetime.now())\
         .group_by(Booking.id)\
         .having(func.count(Participants.player) < Field.max_people).all()
+    past_events = db.session.query(Booking, Participants, Field) \
+        .add_columns(Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.id, Booking.field_id) \
+        .filter(Booking.id == Participants.booking).filter(Booking.field_id == Field.id) \
+        .filter(Booking.date < datetime.now()) \
+        .filter(Participants.player == current_user.id)\
+        .group_by(Booking.id) \
+        .having(func.count(Participants.player) < Field.max_people).all()
     image_file = url_for('static', filename='profile_pics/' + player.image_file)
-    return render_template('player_home.html', title='Home', player=player, bookings=bookings, participants=participants, myevents=myevents, events=events,
-                           fields=fields, clubs=clubs, image_file=image_file)
+    return render_template('player_home.html', title='Home', player=player, bookings=bookings, participants=participants, myevents=myevents,
+                           events=events, past_events=past_events, fields=fields, clubs=clubs, image_file=image_file)
 
 
 @player.route("/new_booking/<location>", methods=['GET', 'POST'])
@@ -156,6 +166,7 @@ def new_booking(location):  # i need to pass a parameter because i need to pass 
 
 @player.route("/event/<int:event_id>", methods=['GET', 'POST'])
 def event(event_id):
+    time_now = datetime.now()
     posts = db.session.query(Post, Player).add_columns(Post.id, Post.event, Post.date_posted, Post.content, Player.name, Player.surname, Player.image_file)\
         .filter(Post.player_id == Player.id).filter(Post.event == event_id)
     form = PostForm()
@@ -179,7 +190,7 @@ def event(event_id):
             player_status = 1
     booker = User.query.filter_by(id=booking.booker_id).first()
     return render_template('event.html', title=booking.title, booking=booking, booker=booker.id, player_status=player_status, posts=posts,
-                           players=players, club=club, field=field, form=form)
+                           players=players, club=club, field=field, form=form, time_now=time_now)
 
 
 @player.route("/event/<int:event_id>/join", methods=['POST'])
@@ -236,7 +247,7 @@ def cancel(event_id):
     db.session.delete(costlog)
     '''
     # send email to club to notify that the event has been deleted
-    player = Player.query.filter_by(user_id=current_user.id).first()
+    player = Player.query.filter_by(user_id=booking.booker_id).first()
     field = Field.query.filter_by(id=booking.field_id).first()
     club = Club.query.filter_by(id=field.club_id).first()
     club_user = User.query.filter_by(id=club.user_id).first()
@@ -247,3 +258,116 @@ def cancel(event_id):
     flash('Your booking has been deleted!', 'success')
     return redirect(url_for('player.player_home'))
 
+
+@player.route("/my_bookings")
+@login_required
+def my_bookings():
+    if current_user.is_authenticated:
+        if current_user.urole == 'Club':
+            return redirect(url_for('club.club_home'))
+    player = Player.query.filter_by(user_id=current_user.id).first()
+    bookings = Booking.query.filter_by(booker_id=current_user.id)\
+                .filter(Booking.date > datetime.now()) \
+                .all()
+    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname,
+                                                                      Player.image_file) \
+        .filter(Participants.player == Player.id)
+    fields = Field.query.all()
+    clubs = Club.query.all()
+    image_file = url_for('static', filename='profile_pics/' + player.image_file)
+    return render_template('my_bookings.html', title='My Bookings', player=player, bookings=bookings, participants=participants,
+                           fields=fields, clubs=clubs, image_file=image_file)
+
+
+@player.route("/my_events")
+@login_required
+def my_events():
+    if current_user.is_authenticated:
+        if current_user.urole == 'Club':
+            return redirect(url_for('club.club_home'))
+    player = Player.query.filter_by(user_id=current_user.id).first()
+    bookings_query = db.session.query(Booking).filter_by(booker_id=current_user.id).add_columns(Booking.id).all()  # query to pass the booking.ids to exclude in the public event
+    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname,
+                                                                      Player.image_file) \
+        .filter(Participants.player == Player.id)
+    fields = Field.query.all()
+    clubs = Club.query.all()
+    bookings_id = []  # list of ids of my bookings
+    for booking in bookings_query:
+        bookings_id.append(booking[1])
+    myevents = db.session.query(Booking).join(Participants) \
+        .add_columns(Booking.id, Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.booker_id,
+                     Booking.field_id) \
+        .filter(Participants.player == player.id).filter(current_user.id != Booking.booker_id) \
+        .filter(Booking.date > datetime.now()) \
+        .all()
+    image_file = url_for('static', filename='profile_pics/' + player.image_file)
+    return render_template('my_events.html', title='My Events', player=player, participants=participants,
+                           fields=fields, clubs=clubs, image_file=image_file, myevents=myevents)
+
+
+@player.route("/events")
+@login_required
+def events():
+    if current_user.is_authenticated:
+        if current_user.urole == 'Club':
+            return redirect(url_for('club.club_home'))
+    player = Player.query.filter_by(user_id=current_user.id).first()
+    bookings_query = db.session.query(Booking).filter_by(booker_id=current_user.id).add_columns(Booking.id).all()  # query to pass the booking.ids to exclude in the public event
+    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname, Player.image_file)\
+        .filter(Participants.player == Player.id)
+    fields = Field.query.all()
+    clubs = Club.query.all()
+    bookings_id = []  # list of ids of my bookings
+    for booking in bookings_query:
+        bookings_id.append(booking[1])
+    myevents = db.session.query(Booking).join(Participants)\
+        .add_columns(Booking.id, Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.booker_id, Booking.field_id)\
+        .filter(Participants.player == player.id).filter(current_user.id != Booking.booker_id) \
+        .filter(Booking.date > datetime.now()) \
+        .all()
+    myevents_id = []  # list of ids of the event i have already joined
+    for event in myevents:
+        myevents_id.append(event[1])
+    events = db.session.query(Booking, Participants, Field)\
+        .add_columns(Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.id, Booking.field_id)\
+        .filter(Booking.id == Participants.booking).filter(Booking.field_id == Field.id)\
+        .filter(Booking.id.notin_(myevents_id))\
+        .filter(Booking.id.notin_(bookings_id))\
+        .filter(Booking.date > datetime.now())\
+        .group_by(Booking.id)\
+        .having(func.count(Participants.player) < Field.max_people).all()
+    image_file = url_for('static', filename='profile_pics/' + player.image_file)
+    return render_template('events.html', title='Public Events', player=player, participants=participants, myevents=myevents,
+                           events=events, fields=fields, clubs=clubs, image_file=image_file)
+
+
+@player.route("/past_events")
+@login_required
+def past_events():
+    if current_user.is_authenticated:
+        if current_user.urole == 'Club':
+            return redirect(url_for('club.club_home'))
+    player = Player.query.filter_by(user_id=current_user.id).first()
+    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname, Player.image_file)\
+        .filter(Participants.player == Player.id)
+    fields = Field.query.all()
+    clubs = Club.query.all()
+    past_events = db.session.query(Booking, Participants, Field) \
+        .add_columns(Participants.player, Booking.title, Booking.date, Booking.startTime, Booking.id, Booking.field_id) \
+        .filter(Booking.id == Participants.booking).filter(Booking.field_id == Field.id) \
+        .filter(Booking.date < datetime.now()) \
+        .filter(Participants.player == current_user.id)\
+        .group_by(Booking.id) \
+        .having(func.count(Participants.player) < Field.max_people).all()
+    image_file = url_for('static', filename='profile_pics/' + player.image_file)
+    return render_template('past_events.html', title='Past Events', player=player, participants=participants,
+                           past_events=past_events, fields=fields, clubs=clubs, image_file=image_file)
+
+
+@player.route("/players/<int:player_id>", methods=['GET', 'POST'])
+def players(player_id):
+    player = Player.query.filter_by(id=player_id).first()
+    user = User.query.filter_by(id=player.user_id).first()
+    image_file = url_for('static', filename='profile_pics/' + player.image_file)
+    return render_template('player.html', title=player.name, player=player, user=user, image_file=image_file)

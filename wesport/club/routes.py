@@ -44,7 +44,7 @@ def club_home():
         .filter(Field.club_id == club.id)\
         .filter(Booking.date > datetime.now()).all()
     image_file = url_for('static', filename='profile_pics/' + club.image_file)
-    return render_template('club_home.html', fields=fields, bookings=bookings, image_file=image_file)
+    return render_template('club_home.html', fields=fields, bookings=bookings, image_file=image_file, club=club)
 
 
 @club.route("/add_field", methods=['GET', 'POST'])
@@ -64,6 +64,28 @@ def add_field():
     return render_template('add_field.html', title='Add Field', form=form)
 
 
+@club.route("/myfield/<int:field_id>")
+@login_required
+def myfield(field_id):
+    field = Field.query.get_or_404(field_id)
+    print field
+    return render_template('field.html', title=field.field_name, field=field)
+
+
+@club.route("/myfield/<int:field_id>/cancel_field", methods=['POST'])
+@login_required
+def cancel_field(field_id):
+    field = Field.query.get_or_404(field_id)
+    booking = Booking.query.filter_by(field_id=field_id)
+    if booking:
+        flash('Fields with current Bookings cannot be canceled', 'danger')
+        return redirect(url_for('club.club_home'))
+    db.session.delete(field)
+    db.session.commit()
+    flash('Your field has been deleted!', 'success')
+    return redirect(url_for('club.club_home'))
+
+
 @club.route("/booking/<int:booking_id>")
 @login_required
 def booking(booking_id):
@@ -80,7 +102,7 @@ def cancel_booking(booking_id):  # to be tested
 
     if booking.date <= datetime.now():
         flash('Past booking cannot be canceled', 'info')
-        return redirect(url_for('player.player_home'))
+        return redirect(url_for('club.club_home'))
 
     # eliminate participants of the eliminated booking
 
@@ -104,7 +126,7 @@ def cancel_booking(booking_id):  # to be tested
     db.session.delete(booking)
     db.session.commit()
     flash('Your booking has been deleted!', 'success')
-    return redirect(url_for('player.player_home'))
+    return redirect(url_for('club.club_home'))
 
 
 @club.route('/clubs/<sport>')  # route needed fot java script select field only of the appropriate club

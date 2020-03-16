@@ -38,7 +38,7 @@ class User(db.Model, UserMixin):
 class Club(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), unique=True, nullable=False)
-    phone_number = db.Column(db.String(20), unique=True, nullable=False)
+    phone_number = db.Column(db.String(20), unique=False, nullable=False)
     city = db.Column(db.String(60), nullable=False)
     address = db.Column(db.String(60), nullable=False)
     lat = db.Column(db.Float(10), nullable=False)
@@ -60,7 +60,7 @@ class Player(db.Model):
     surname = db.Column(db.String(60), nullable=False)
     gender = db.Column(db.String(10), nullable=False)
     country = db.Column(db.String(20), nullable=False)
-    phone_number = db.Column(db.String(20), unique=True, nullable=False)
+    phone_number = db.Column(db.String(20), unique=False, nullable=False)
     address = db.Column(db.String(60), nullable=False)
     birthdate = db.Column(db.Date, nullable=False)
     subscription_date = db.Column(db.Date, nullable=False, default=datetime.utcnow)

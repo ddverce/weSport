@@ -56,7 +56,13 @@
                     <a class="nav-item nav-link" href="{{ url_for('main.logout') }}">Logout</a>
                 {% else %}
                     <a class="nav-item nav-link" href="{{ url_for('main.login') }}">Login</a>
-                    <a class="nav-item nav-link" href="{{ url_for('main.register') }}">Register</a>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register</button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item active" href="{{ url_for('player.player_register') }}">Player</a>
+                            <a class="dropdown-item active" href="{{ url_for('club.club_register') }}">Club</a>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
           </div>
