@@ -1,8 +1,36 @@
 {% extends "layout.html" %}
 {% block content %}
-    <a href="{{ url_for('player.player_register') }}">Player</a>
-    <a href="{{ url_for('club.club_register') }}">Club</a>
-    <div class="border-top pt-3">
+        <h1>What type of user are you?</h1>
+        <button class=btn_player onclick='window.location.href="{{ url_for('player.player_register') }}"'>Player</button>
+        <button class=btn_club onclick='window.location.href="{{ url_for('club.club_register') }}"'>Club</button>
+        <style>
+            .btn_club, .btn_player {
+              background-color: #ffffff;
+              border-color: #17a2b8;
+              color: #17a2b8;
+              padding: 32px 48px;
+              font-size: 32px;
+              cursor: pointer;
+              color: #17a2b8;
+              border: 1px solid transparent;
+              border-radius: .25rem;
+              text-align: center;
+              box-shadow: 0px 0px 0px 0.2rem #17a2b8;
+            }
+
+            .btn_club:hover,.btn_player:hover {
+                background-color: #17a2b8;
+                color: #ffffff;
+                border-color: #17a2b8;
+            }
+
+            .btn_club {
+                margin-left: 2.5%;
+            }
+
+        </style>
+
+        <div class="border-top pt-3">
             <small class="text-muted">
                 Already Have An Account? <a class="ml-2" href="{{ url_for('main.login') }}">Sign In</a>
             </small>

@@ -1,7 +1,6 @@
-{% extends "layout.html" %}
+{% extends "layout_home.html" %}
 {% block content %}
     {% if current_user.is_authenticated==false %}
-
             <h1><b>No more excuses not to play sports! </b></h1>
             <h2>Already xxx users and xx clubs are part of our community in all regions of Italy!</h2>
             <div class="container">
@@ -13,7 +12,7 @@
                  alt="Pinturicchio" title="Pinturicchio">
             <img class="mySlides" src="../static/home_images/libertadores_2018_river_campeon.jpg"
                  alt="River" title="El mas grande">
-            <button class="btn-left" onclick="plusDivs(-1)">&#10094;</button>
+                <button class="btn-left" onclick="plusDivs(-1)">&#10094;</button>
             <button class="btn-right" onclick="plusDivs(1)">&#10095;</button>
             <style>
                 .container {

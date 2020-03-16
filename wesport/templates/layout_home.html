@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
     {% if title %}
         <title>WeSport - {{ title }}</title>
     {% else %}
@@ -39,7 +40,7 @@
                             <img style="width:auto;height:45px;"  src="../static/home_images/Wesports logo.jpg" alt="Logo- Home">
                         </a>
                     {% else %}
-                        <a class="navbar-brand mr-4" " href="{{ url_for('club.club_home') }}">
+                        <a class="navbar-brand mr-4"  href="{{ url_for('club.club_home') }}">
                             <img style="width:auto;height:45px;"  src="../static/home_images/Wesports logo.jpg" alt="Logo- Home">
                         </a>
                     {% endif %}
@@ -61,7 +62,7 @@
                     <a class="nav-item nav-link" href="{{ url_for('main.logout') }}">Logout</a>
                 {% else %}
                     <a class="nav-item nav-link" href="{{ url_for('main.login') }}">Login</a>
-                    <!--<a class="nav-item nav-link" href="{{ url_for('main.register') }}">-->
+                    <!--<a class="nav-item nav-link" href="{{ url_for('main.register') }}">Register</a>-->
                     <a class="nav-item nav-link">
                     <div class="open-button" onclick="openForm()">Register</div>
                         <div class="form-popup" id="myForm">
@@ -106,11 +107,6 @@
             {% block content %}
             {% endblock %} <!--main page content block-->
         </div>
-        <div class="col-md-4">
-          <div class="content-section">
-              {% block right_content %}{% endblock %} <!--right side page content block-->
-          </div>
-        </div>
       </div>
     </main>
 
@@ -122,6 +118,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
+
 
 <style>
 .open-button {
