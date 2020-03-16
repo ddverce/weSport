@@ -86,6 +86,7 @@
                         </script>
 
                     </a>
+                    <a class="nav-item nav-link" href="{{ url_for('main.about') }}">About</a>
                 {% endif %}
             </div>
           </div>
@@ -94,7 +95,7 @@
     </header>
     <main role="main" class="container">
       <div class="row">  <!--container to set where the flash messages arte displayed-->
-        <div class="col-md-8">
+       <!-- <div class="col-md-8"> -->
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category , message in messages %}
@@ -106,9 +107,27 @@
             {% endwith %}
             {% block content %}
             {% endblock %} <!--main page content block-->
-        </div>
+        <!--</div> -->
       </div>
     </main>
+    <footer>
+        <div class="foot">
+            <style>
+                .foot{
+                    margin-top: 50px;
+                    margin-bottom: -30px;
+                    background-color: #fe7b1f;
+                    color: #ffffff;
+                    left: 0;
+                    bottom: 0;
+                    width: 100%;
+                    text-align: center;
+                }
+            </style>
+                <h>Daje</h>
+            <p>Questo è er footer, ce scrivemo quello che volete</p>
+        </div>
+    </footer>
 
     <!-- Optional JavaScript -->
 

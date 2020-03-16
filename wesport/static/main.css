@@ -30,6 +30,8 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid #dddddd;
   border-radius: 3px;
   margin-bottom: 20px;
+  width: 300px;
+  text-overflow: ellipsis;
 }
 
 .article-title {
@@ -77,4 +79,15 @@ a.article-title:hover {
 
 .account-heading {
   font-size: 2.5rem;
+}
+
+.media{
+  width: 200px;
+  text-overflow-ellipsis: 1;
+}
+
+.media-body{
+  text-overflow: ellipsis;
+  width: 200px
+
 }

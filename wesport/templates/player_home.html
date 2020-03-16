@@ -95,7 +95,7 @@
             <img class="rounded-circle account-img" src="{{ image_file }}">
             <div class="media-body">
               <h2 class="account-heading">{{current_user.username}}</h2>
-              <p class="text-secondary">{{ current_user.email }}</p>
+              <p class="text-secondary" style="text-overflow: ellipsis">{{ current_user.email }}</p>
             </div>
         </div>
         <ul class="list-group">
@@ -106,3 +106,18 @@
             <a class="list-group-item list-group-item-light" href="{{ url_for('main.account') }}">Settings</a>
         </ul>
 {% endblock %}
+
+<style>
+
+    .content-section {
+        width: auto
+    }
+
+    .media {
+        width: auto
+    }
+    .media-body{
+        width: auto
+        display: inline-block;
+    }
+</style>
