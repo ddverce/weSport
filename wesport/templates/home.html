@@ -3,7 +3,7 @@
     {% if current_user.is_authenticated==false %}
             <div class="container">
             <h1><b>No more excuses not to play sports! </b></h1>
-            <h2>You're not alone! Play the sports you love and get to know new people!</h2>
+            <h2>Join our community! Play the sports you love and get to know new people!</h2>
             </div>
             <div class="container" >
             <h2>Check this out:</h2>
@@ -15,24 +15,28 @@
             <div class="container">
                 <img class="mySlides" src="../static/home_images/batigol_fiore.jpg"
                  alt="Batigol" title="Batigol" width="400px">
-            <img class="mySlides" src="../static/home_images/rosina_toro.jpg"
+                 <img class="mySlides" src="../static/home_images/rosina_toro.jpg"
                  alt="Rosina" title="Rosina">
-            <img class="mySlides" src="../static/home_images/real-juve-del-piero.jpg"
+                <img class="mySlides" src="../static/home_images/real-juve-del-piero.jpg"
                  alt="Pinturicchio" title="Pinturicchio">
-            <img class="mySlides" src="../static/home_images/libertadores_2018_river_campeon.jpg"
+                <img class="mySlides" src="../static/home_images/libertadores_2018_river_campeon.jpg"
                  alt="River" title="El mas grande">
                 <button class="btn-left" onclick="plusDivs(-1)">&#10094;</button>
-            <button class="btn-right" onclick="plusDivs(1)">&#10095;</button>
-            <style>
+                <button class="btn-right" onclick="plusDivs(1)">&#10095;</button>
+
+                <style>
+
                 .container {
-                  position: relative;
-                  width: 100%;
-                  max-width: 1125px;
+                    position: relative;
+                    width: 100%;
+                    max-width: 1125px;
+                    margin-top: 20px;
+
                 }
 
                 .container img {
-                  width: 100%;
-                  height: auto;
+                    width: 100%;
+                    height: auto;
                 }
 
                 .container .btn-left {
