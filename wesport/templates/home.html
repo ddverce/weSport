@@ -1,13 +1,13 @@
 {% extends "layout_home.html" %}
 {% block content %}
     {% if current_user.is_authenticated==false %}
-            <div class="container">
+            <div class="text-center" style="margin-top: 20px;">
             <h1><b>No more excuses not to play sports! </b></h1>
             <h2>Join our community! Play the sports you love and get to know new people!</h2>
             </div>
-            <div class="container" >
-            <h2>Check this out:</h2>
-            <video width="100%" style="margin: 0 auto;" controls>
+            <div class="text-center">
+            <h2 class="text-center">Check this out:</h2>
+            <video width="auto"  controls>
                 <source src="../static/home_images/Wesports - Kickstarter.mp4">
             </video>
             </div>
