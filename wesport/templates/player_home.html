@@ -95,7 +95,7 @@
             <img class="rounded-circle account-img" src="{{ image_file }}">
             <div class="media-body">
               <h2 class="account-heading">{{current_user.username}}</h2>
-              <p class="text-secondary" style="text-overflow: ellipsis">{{ current_user.email }}</p>
+              <p class="text-secondary">{{ current_user.email }}</p>
             </div>
         </div>
         <ul class="list-group">
@@ -117,7 +117,13 @@
         width: auto
     }
     .media-body{
-        width: auto
+        width: auto;
         display: inline-block;
+    }
+
+
+    .text-secondary{
+        text-overflow: ellipsis;
+        width: 50px;
     }
 </style>
