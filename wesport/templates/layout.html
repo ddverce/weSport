@@ -31,7 +31,7 @@
 </head>
 <body>
     <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="background-color: #fe7b1f">
         <div class="container">
             {% if current_user.is_authenticated %}
                     {% if current_user.urole == 'Player' %}
@@ -39,7 +39,7 @@
                             <img style="width:auto;height:45px;"  src="../static/home_images/Wesports logo.jpg" alt="Logo- Home">
                         </a>
                     {% else %}
-                        <a class="navbar-brand mr-4" " href="{{ url_for('club.club_home') }}">
+                        <a class="navbar-brand mr-4" href="{{ url_for('club.club_home') }}">
                             <img style="width:auto;height:45px;"  src="../static/home_images/Wesports logo.jpg" alt="Logo- Home">
                         </a>
                     {% endif %}
