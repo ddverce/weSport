@@ -13,16 +13,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .site-header .navbar-nav .nav-link {
-  color: #cbd5db;
+  color: #ffffff;
 }
 
 .site-header .navbar-nav .nav-link:hover {
-  color: #cbd5db;
+  color: #ffffff;
 }
 
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
 }
+
 
 .content-section {
   background: #ffffff;
@@ -85,13 +86,12 @@ a.article-title:hover {
 
 .media{
   width: 200px;
-  text-overflow-ellipsis: 1;
+  text-overflow: ellipsis;
 }
 
 .media-body{
   text-overflow: ellipsis;
   width: 200px
-
 }
 
 .foot {
@@ -106,56 +106,55 @@ a.article-title:hover {
  }
 
 .container {
-                    position: relative;
-                    width: 100%;
-                    max-width: 1125px;
+    position: relative;
+    width: 100%;
+    max-width: 1125px;
+}
 
-                }
+.container img {
+    width: 100%;
+    height: auto;
+}
 
-                .container img {
-                    width: 100%;
-                    height: auto;
-                }
+.container .btn-left {
+    position: absolute;
+    top: 50%;
+    left: 2.5%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #555;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+}
 
-                .container .btn-left {
-                  position: absolute;
-                  top: 50%;
-                  left: 2.5%;
-                  transform: translate(-50%, -50%);
-                  -ms-transform: translate(-50%, -50%);
-                  background-color: #555;
-                  color: white;
-                  font-size: 16px;
-                  padding: 12px 24px;
-                  border: none;
-                  cursor: pointer;
-                  border-radius: 5px;
-                  text-align: center;
-                }
+.container .btn-right {
+    position: absolute;
+    top: 50%;
+    left: 97.5%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #555;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+}
 
-                .container .btn-right {
-                  position: absolute;
-                  top: 50%;
-                  left: 97.5%;
-                  transform: translate(-50%, -50%);
-                  -ms-transform: translate(-50%, -50%);
-                  background-color: #555;
-                  color: white;
-                  font-size: 16px;
-                  padding: 12px 24px;
-                  border: none;
-                  cursor: pointer;
-                  border-radius: 5px;
-                  text-align: center;
-                }
-
-                .container .btn-right:hover,.btn-left:hover {
-                  background-color: black;
-                }
+.container .btn-right:hover,.btn-left:hover {
+    background-color: black;
+}
 
 .page-container {
-  position: relative;
-  min-height: 100vh;
+    position: relative;
+    min-height: 90vh;
 }
 
 .content-wrap {
