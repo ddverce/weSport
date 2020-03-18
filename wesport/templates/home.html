@@ -1,7 +1,7 @@
 {% extends "layout_home.html" %}
 {% block content %}
     {% if current_user.is_authenticated==false %}
-            <div class="text-center" style="margin-top: 20px;">
+            <div class="text-center" >
             <h1><b>No more excuses not to play sports! </b></h1>
             <h2>Join our community! Play the sports you love and get to know new people!</h2>
             </div>
@@ -12,7 +12,7 @@
             </video>
             </div>
 
-            <div class="container">
+            <div class="container" style="margin-top: 20px;">
                 <img class="mySlides" src="../static/home_images/batigol_fiore.jpg"
                  alt="Batigol" title="Batigol" width="400px">
                  <img class="mySlides" src="../static/home_images/rosina_toro.jpg"
@@ -24,57 +24,7 @@
                 <button class="btn-left" onclick="plusDivs(-1)">&#10094;</button>
                 <button class="btn-right" onclick="plusDivs(1)">&#10095;</button>
 
-                <style>
 
-                .container {
-                    position: relative;
-                    width: 100%;
-                    max-width: 1125px;
-                    margin-top: 20px;
-
-                }
-
-                .container img {
-                    width: 100%;
-                    height: auto;
-                }
-
-                .container .btn-left {
-                  position: absolute;
-                  top: 50%;
-                  left: 2.5%;
-                  transform: translate(-50%, -50%);
-                  -ms-transform: translate(-50%, -50%);
-                  background-color: #555;
-                  color: white;
-                  font-size: 16px;
-                  padding: 12px 24px;
-                  border: none;
-                  cursor: pointer;
-                  border-radius: 5px;
-                  text-align: center;
-                }
-
-                .container .btn-right {
-                  position: absolute;
-                  top: 50%;
-                  left: 97.5%;
-                  transform: translate(-50%, -50%);
-                  -ms-transform: translate(-50%, -50%);
-                  background-color: #555;
-                  color: white;
-                  font-size: 16px;
-                  padding: 12px 24px;
-                  border: none;
-                  cursor: pointer;
-                  border-radius: 5px;
-                  text-align: center;
-                }
-
-                .container .btn-right:hover,.btn-left:hover {
-                  background-color: black;
-                }
-            </style>
 
             <script>
                 var slideIndex = 1;

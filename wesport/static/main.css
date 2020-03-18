@@ -17,7 +17,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .site-header .navbar-nav .nav-link:hover {
-  color: #FE7B1F;
+  color: #cbd5db;
 }
 
 .site-header .navbar-nav .nav-link.active {
@@ -93,3 +93,84 @@ a.article-title:hover {
   width: 200px
 
 }
+
+.foot {
+     margin-top: 50px;
+     margin-bottom: -30px;
+     background-color: #fe7b1f;
+     color: #ffffff;
+     left: 0;
+     bottom: 0;
+     width: 100%;
+     text-align: center;
+ }
+
+.container {
+                    position: relative;
+                    width: 100%;
+                    max-width: 1125px;
+
+                }
+
+                .container img {
+                    width: 100%;
+                    height: auto;
+                }
+
+                .container .btn-left {
+                  position: absolute;
+                  top: 50%;
+                  left: 2.5%;
+                  transform: translate(-50%, -50%);
+                  -ms-transform: translate(-50%, -50%);
+                  background-color: #555;
+                  color: white;
+                  font-size: 16px;
+                  padding: 12px 24px;
+                  border: none;
+                  cursor: pointer;
+                  border-radius: 5px;
+                  text-align: center;
+                }
+
+                .container .btn-right {
+                  position: absolute;
+                  top: 50%;
+                  left: 97.5%;
+                  transform: translate(-50%, -50%);
+                  -ms-transform: translate(-50%, -50%);
+                  background-color: #555;
+                  color: white;
+                  font-size: 16px;
+                  padding: 12px 24px;
+                  border: none;
+                  cursor: pointer;
+                  border-radius: 5px;
+                  text-align: center;
+                }
+
+                .container .btn-right:hover,.btn-left:hover {
+                  background-color: black;
+                }
+
+.page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+.content-wrap {
+  padding-bottom: 2.5rem;    /* Footer height */
+}
+
+.page-footer{
+    margin-top: 50px;
+    margin-bottom: -3px;
+    background-color: #fe7b1f;
+    color: #ffffff;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+}
+
