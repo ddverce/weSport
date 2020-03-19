@@ -54,7 +54,7 @@
 {% block right_content %}
     {% if player_status == 0 %}
     {% else %}
-        <legend class="border-bottom mb-4">Event Chat</legend>
+        <legend class="border-bottom mb-4" >Event Chat</legend>
         {% for post in posts %}
             <div class="content-section">
                 <img class="rounded-circle" width="30" height="30" src={{ url_for('static', filename='profile_pics/' + post.image_file) }}>
@@ -62,7 +62,7 @@
                 <p>{{ post.content }}</p>
             </div>
         {% endfor %}
-        <div class="content-section">
+        <div class="content-section" >
                 <form method="post" action="">
                     {{ form.hidden_tag() }}
                     <fieldset class="form-group">
