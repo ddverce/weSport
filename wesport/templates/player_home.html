@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <h2>Hello Mr.{{ player.name}}, {{ player.surname }} !</h2> <br>
+    <h2>Hello {{ player.name}}, {{ player.surname }} !</h2> <br>
     <fieldset class="form-group">
         <legend class="border-bottom mb-4">My Bookings</legend>
         {% for event in bookings %}

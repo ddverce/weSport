@@ -64,7 +64,6 @@
                     <a class="nav-item nav-link" href="{{ url_for('main.logout') }}">Logout</a>
                 {% else %}
                     <a class="nav-item nav-link" href="{{ url_for('main.login') }}">Login</a>
-                    <!--<a class="nav-item nav-link" href="{{ url_for('main.register') }}">-->
                      <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" style="background-color: #FE7B1F; border-color: #FE7B1F;"
                                 type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register</button>
@@ -97,7 +96,7 @@
         </div>
         {% if current_user.is_authenticated %}
         <div class="col-md-4">
-          <div class="content-section" style="height: 430px; overflow-y: scroll; width: 340px; ">
+          <div class="content-section" style="height: 520px; overflow-y: auto; width: 340px; ">
               {% block right_content %}{% endblock %} <!--right side page content block-->
           </div>
         </div>
