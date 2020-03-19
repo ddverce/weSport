@@ -36,12 +36,12 @@
         <div class="container">
             {% if current_user.is_authenticated %}
                     {% if current_user.urole == 'Player' %}
-                        <a class="navbar-brand mr-4"  href="{{ url_for('player.player_home') }}">Wesport</a>
+                        <a class="navbar-brand"  href="{{ url_for('player.player_home') }}">Wesport</a>
                     {% else %}
-                        <a class="navbar-brand mr-4" " href="{{ url_for('club.club_home') }}">Wesport</a>
+                        <a class="navbar-brand"  href="{{ url_for('club.club_home') }}">Wesport</a>
                     {% endif %}
             {% else %}
-                <a class="navbar-brand mr-4" href="/">Wesport</a>
+                <a class="navbar-brand" href="/">Wesport</a>
             {% endif %}
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -57,7 +57,7 @@
                 {% else %}
                     <a class="nav-item nav-link" href="{{ url_for('main.login') }}">Login</a>
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register</button>
+                        <button class="btn btn-orange dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register</button>
                         <div class="dropdown-menu">
                             <a class="dropdown-item active" href="{{ url_for('player.player_register') }}">Player</a>
                             <a class="dropdown-item active" href="{{ url_for('club.club_register') }}">Club</a>

@@ -60,7 +60,7 @@
         {% endfor %}
     </fieldset>
     <fieldset class="form-group">
-        <legend class="border-bottom mb-4">Public events</legend>
+        <legend class="border-bottom mb-4">Join events</legend>
         {% for event in events %}
             <div class="content-section">
                 <h2><a class="article-title" href="{{  url_for('player.event', event_id=event.id) }}" target="_blank">Event : {{  event.title }}</a></h2>
@@ -119,21 +119,19 @@
     </fieldset>
 {% endblock content %}
 {% block right_content %}
-    <h3>My Sidebar</h3>
-        <div class="media">
-            <img class="rounded-circle account-img" src="{{ image_file }}">
-            <div class="media-body">
-              <h2 class="account-heading">{{current_user.username}}</h2>
-              <p class="text-secondary">{{ current_user.email }}</p>
-            </div>
+    <div class="media">
+        <img class="rounded-circle account-img" src="{{ image_file }}">
+        <div class="media-body">
+          <h2 class="account-heading">{{current_user.username}}</h2>
+          <p class="text-secondary">{{ current_user.email }}</p>
         </div>
-        <ul class="list-group">
-            <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('player.new_booking', location='nolocation') }}">New Booking</a>
-            <a class="list-group-item list-group-item-light" href="{{ url_for('player.my_bookings') }}">My Bookings</a>
-            <a class="list-group-item list-group-item-light" href="{{ url_for('player.my_events') }}">My Events</a>
-            <a class="list-group-item list-group-item-light" href="{{ url_for('player.events') }}">Public Events</a>
-            <a class="list-group-item list-group-item-light" href="{{ url_for('player.past_events') }}">Past Events</a>
-            <a class="list-group-item list-group-item-light" href="{{ url_for('main.account') }}">Settings</a>
-            <li class="list-group-item list-group-item-selected">prova</li>
-        </ul>
+    </div>
+    <ul class="list-group">
+        <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('player.new_booking', location='nolocation') }}">New Booking</a>
+        <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('player.my_bookings') }}">My Bookings</a>
+        <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('player.my_events') }}">My Events</a>
+        <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('player.events') }}">Join Events</a>
+        <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('player.past_events') }}">Past Events</a>
+        <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('main.account') }}">Settings</a>
+    </ul>
 {% endblock %}

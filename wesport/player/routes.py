@@ -338,7 +338,7 @@ def events():
         .group_by(Booking.id)\
         .having(func.count(Participants.player) < Field.max_people).all()
     image_file = url_for('static', filename='profile_pics/' + player.image_file)
-    return render_template('events.html', title='Public Events', player=player, participants=participants, myevents=myevents,
+    return render_template('events.html', title='Join Events', player=player, participants=participants, myevents=myevents,
                            events=events, fields=fields, clubs=clubs, image_file=image_file)
 
 

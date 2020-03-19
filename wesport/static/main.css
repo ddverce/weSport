@@ -9,7 +9,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .bg-steel {
-  background-color: #5f788a;
+  background-color: #dd8000;
 }
 
 .site-header .navbar-nav .nav-link .dropdown  {
@@ -81,7 +81,7 @@ a.article-title:hover {
 
 .list-group-item-selected{
   color: #fafafa;
-  background-color: #a75300;
+  background-color: #dd8000;
 }
 
 .list-group-item-personal{
@@ -91,5 +91,41 @@ a.article-title:hover {
 
 .list-group-item-personal:hover{
   color: #fafafa;
-  background-color: #a75300;
+  background-color: #dd8000;
+}
+
+.btn-orange{
+  color: #ebba73;
+  background-color: #dd8000;
+}
+
+
+element.style {
+}
+.btn.focus, .btn:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+.btn:hover {
+    color: #f4e8ec;
+}
+
+.btn.focus, .btn:focus {
+    outline: 0;
+    box-shadow: none;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    color: #dd8000;
+    text-decoration: none;
+    background-color: #fafafa;
+}
+.dropdown-item:hover {
+    background-color: #dddddd;
+}
+
+.container-image {
+    width: 100%;
+    padding-right: unset;
+    padding-left: unset;
 }

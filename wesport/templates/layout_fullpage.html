@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
     {% if title %}
         <title>WeSport - {{ title }}</title>
     {% else %}
@@ -30,26 +31,17 @@
     {% endif %}
 </head>
 <body>
-<div>
-<div class="page-container">
-    <div class="content-wrap">
     <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="background-color: #fe7b1f">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
             {% if current_user.is_authenticated %}
                     {% if current_user.urole == 'Player' %}
-                        <a class="navbar-brand mr-4"  href="{{ url_for('player.player_home') }}">
-                            <img style="width:auto;height:45px;"  src="../static/home_images/Wesports logo.jpg" alt="Logo- Home">
-                        </a>
+                        <a class="navbar-brand"  href="{{ url_for('player.player_home') }}">Wesport</a>
                     {% else %}
-                        <a class="navbar-brand mr-4" href="{{ url_for('club.club_home') }}">
-                            <img style="width:auto;height:45px;"  src="../static/home_images/Wesports logo.jpg" alt="Logo- Home">
-                        </a>
+                        <a class="navbar-brand"  href="{{ url_for('club.club_home') }}">Wesport</a>
                     {% endif %}
             {% else %}
-                <a class="navbar-brand mr-4" href="/">
-                    <img style="width:auto;height:45px;"  src="../static/home_images/Wesports logo.jpg" alt="Logo- Home">
-                </a>
+                <a class="navbar-brand" href="/">Wesport</a>
             {% endif %}
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -63,17 +55,15 @@
                     <a class="nav-item nav-link" href="{{ url_for('main.about') }}">About</a>
                     <a class="nav-item nav-link" href="{{ url_for('main.logout') }}">Logout</a>
                 {% else %}
+                    <a class="nav-item nav-link" href="{{ url_for('main.about') }}">About</a>
                     <a class="nav-item nav-link" href="{{ url_for('main.login') }}">Login</a>
-                    <!--<a class="nav-item nav-link" href="{{ url_for('main.register') }}">-->
-                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" style="background-color: #FE7B1F; border-color: #FE7B1F;"
-                                type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register</button>
+                    <div class="dropdown">
+                        <button class="btn btn-orange dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register</button>
                         <div class="dropdown-menu">
                             <a class="dropdown-item active" href="{{ url_for('player.player_register') }}">Player</a>
                             <a class="dropdown-item active" href="{{ url_for('club.club_register') }}">Club</a>
                         </div>
                     </div>
-                    <a class="nav-item nav-link" href="{{ url_for('main.about') }}">About</a>
                 {% endif %}
             </div>
           </div>
@@ -96,15 +86,6 @@
         </div>
     </main>
     </div>
-
-
-    <footer class="page-footer">
-      <div>
-          <h>Daje</h>
-            <p>Questo è er footer, ce scrivemo quello che volete</p>
-      </div>
-    </footer>
-
     <!-- Optional JavaScript -->
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

@@ -41,11 +41,11 @@
             </div>
         </div>
         <ul class="list-group">
-            <a class="list-group-item list-group-item-light" href="{{ url_for('player.new_booking', location='nolocation') }}">New Booking</a>
-            <a class="list-group-item list-group-item-light" href="{{ url_for('player.my_bookings') }}">My Bookings</a>
-            <a class="list-group-item list-group-item-light" href="{{ url_for('player.my_events') }}">My Events</a>
-            <a class="list-group-item list-group-item-light" href="{{ url_for('player.events') }}">Public Events</a>
-            <a class="list-group-item list-group-item-light" href="{{ url_for('player.past_events') }}">Past Events</a>
-            <a class="list-group-item list-group-item-light" href="{{ url_for('main.account') }}">Settings</a>
+            <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('player.new_booking', location='nolocation') }}">New Booking</a>
+            <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('player.my_bookings') }}">My Bookings</a>
+            <a class="list-group-item list-group-item-action list-group-item-selected" href="{{ url_for('player.my_events') }}">My Events</a>
+            <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('player.events') }}">Join Events</a>
+            <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('player.past_events') }}">Past Events</a>
+            <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('main.account') }}">Settings</a>
         </ul>
 {% endblock %}
