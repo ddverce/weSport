@@ -78,3 +78,18 @@ a.article-title:hover {
 .account-heading {
   font-size: 2.5rem;
 }
+
+.list-group-item-selected{
+  color: #fafafa;
+  background-color: #a75300;
+}
+
+.list-group-item-personal{
+      color: #818182;
+    background-color: #fdfdfe;
+}
+
+.list-group-item-personal:hover{
+  color: #fafafa;
+  background-color: #a75300;
+}
