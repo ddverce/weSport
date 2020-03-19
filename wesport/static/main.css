@@ -129,3 +129,39 @@ element.style {
     padding-right: unset;
     padding-left: unset;
 }
+
+.content-section-scroll {
+    height: 250px;
+    overflow-y: scroll;
+}
+
+.content-section-scroll-player {
+    height: 150px;
+    overflow-y: scroll;
+}
+
+.map-container-5{
+overflow:hidden;
+padding-top:10px;
+padding-left: 10px;
+padding-bottom:unset;
+position:relative;
+height:0;
+}
+.map-container-5 iframe{
+left:0;
+top:0;
+height:200px;
+width:300px;
+position:absolute;
+}
+
+.content-section-post {
+    height: 400px;
+    overflow-y: scroll;
+    background: #ffffff;
+    padding: 10px 10px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 10px;
+}

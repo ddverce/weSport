@@ -40,7 +40,7 @@ def club_home():
     club = Club.query.filter_by(user_id=current_user.id).first()
     fields = Field.query.filter_by(club_id=club.id)
     bookings = Booking.query.join(Field, Booking.field_id==Field.id).join(User, Booking.booker_id == User.id).join(Player, User.id == Player.user_id)\
-        .add_columns(Booking.id, Booking.date, Booking.startTime, Booking.endTime, Field.club_id, Field.field_name, Player.name)\
+        .add_columns(Booking.id, Booking.title, Booking.date, Booking.startTime, Booking.endTime, Field.club_id, Field.field_name, Player.name)\
         .filter(Field.club_id == club.id)\
         .filter(Booking.date > datetime.now()).all()
     image_file = url_for('static', filename='profile_pics/' + club.image_file)
@@ -76,7 +76,7 @@ def myfield(field_id):
 @login_required
 def cancel_field(field_id):
     field = Field.query.get_or_404(field_id)
-    booking = Booking.query.filter_by(field_id=field_id)
+    booking = Booking.query.filter_by(field_id=field_id).first()
     if booking:
         flash('Fields with current Bookings cannot be canceled', 'danger')
         return redirect(url_for('club.club_home'))

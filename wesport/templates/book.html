@@ -106,7 +106,9 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.players }}
+                            <div class="content-section-scroll-player">
+                                {{ form.players(class="form-check", style="list-style: none")}}
+                            </div>
                         {% endif %}
                     </div>
                 </fieldset>

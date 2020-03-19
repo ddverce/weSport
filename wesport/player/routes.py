@@ -45,7 +45,7 @@ def player_home():
                 .filter(Booking.date > datetime.now()) \
                 .all()
     bookings_query = db.session.query(Booking).filter_by(booker_id=current_user.id).add_columns(Booking.id).all()  # query to pass the booking.ids to exclude in the public event
-    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname, Player.image_file)\
+    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.id, Player.name, Player.surname, Player.image_file)\
         .filter(Participants.player == Player.id)
     fields = Field.query.all()
     clubs = Club.query.all()
@@ -253,6 +253,9 @@ def cancel(event_id):
     club_user = User.query.filter_by(id=club.user_id).first()
     print (player.name, player.surname, field.field_name, booking.date, booking.startTime, club_user.email)
     send_cancellation_email(player.name, player.surname, field.field_name, booking.date.strftime("%d/%m/%y"), booking.startTime, club_user.email)
+    posts = Post.query.filter_by(event=event_id)
+    for post in posts:
+        db.session.delete(post)
     db.session.delete(booking)
     db.session.commit()
     flash('Your booking has been deleted!', 'success')
