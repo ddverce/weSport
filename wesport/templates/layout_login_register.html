@@ -82,7 +82,7 @@
     </header>
     <main role="main" class="container">
       <div class="row" >  <!--container to set where the flash messages arte displayed-->
-        <div class="col-md-8" style="margin-bottom: 50px;">
+        <div class="col-md-8" style="margin-left: 25%; margin-bottom: 50px;">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category , message in messages %}
