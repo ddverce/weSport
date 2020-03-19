@@ -31,10 +31,10 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid #dddddd;
   border-radius: 3px;
   margin-bottom: 20px;
-  width: 400px;
+  max-width: 400px;
   text-overflow: ellipsis;
   position: relative;
-  margin-left: 50%;
+
 }
 
 .article-title {
@@ -163,7 +163,7 @@ a.article-title:hover {
 
 .page-footer{
     margin-top: 50px;
-    margin-bottom: -3px;
+    margin-bottom: -30px;
     background-color: #fe7b1f;
     color: #ffffff;
     left: 0;
@@ -173,3 +173,11 @@ a.article-title:hover {
     position: absolute;
 }
 
+.dropdown-item.active{
+    background-color: #ffffff;
+    color:#FE7B1F;
+}
+
+.dropdown-item:hover{
+    background-color: #dddddd;
+}
