@@ -158,12 +158,11 @@ a.article-title:hover {
 }
 
 .content-wrap {
-  padding-bottom: 2.5rem;    /* Footer height */
+    padding-bottom: 2.5rem;    /* Footer height */
 }
 
 .page-footer{
     margin-top: 50px;
-    margin-bottom: -30px;
     background-color: #fe7b1f;
     color: #ffffff;
     left: 0;
