@@ -22,7 +22,7 @@
                 {% for participants in participants %}
                     {% if participants.booking == event.id %}
                         <div>
-                            <img class="rounded-circle" width="30" height="30" src={{ url_for('static', filename='profile_pics/' + participants.image_file) }}>
+                            <!--<img class="rounded-circle" width="30" height="30" src={{ url_for('static', filename='profile_pics/' + participants.image_file) }}>-->
                             <small class="article-content">{{ participants.name }} {{ participants.surname }}</small>
                         </div>
                     {% endif %}
