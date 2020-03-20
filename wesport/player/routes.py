@@ -272,8 +272,8 @@ def my_bookings():
     bookings = Booking.query.filter_by(booker_id=current_user.id)\
                 .filter(Booking.date > datetime.now()) \
                 .all()
-    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname,
-                                                                      Player.image_file) \
+    participants = db.session.query(Participants, Player)\
+        .add_columns(Participants.booking, Player.id, Player.name, Player.surname, Player.image_file) \
         .filter(Participants.player == Player.id)
     fields = Field.query.all()
     clubs = Club.query.all()
@@ -290,8 +290,8 @@ def my_events():
             return redirect(url_for('club.club_home'))
     player = Player.query.filter_by(user_id=current_user.id).first()
     bookings_query = db.session.query(Booking).filter_by(booker_id=current_user.id).add_columns(Booking.id).all()  # query to pass the booking.ids to exclude in the public event
-    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname,
-                                                                      Player.image_file) \
+    participants = db.session.query(Participants, Player)\
+        .add_columns(Participants.booking, Player.id, Player.name, Player.surname, Player.image_file) \
         .filter(Participants.player == Player.id)
     fields = Field.query.all()
     clubs = Club.query.all()
@@ -317,7 +317,7 @@ def events():
             return redirect(url_for('club.club_home'))
     player = Player.query.filter_by(user_id=current_user.id).first()
     bookings_query = db.session.query(Booking).filter_by(booker_id=current_user.id).add_columns(Booking.id).all()  # query to pass the booking.ids to exclude in the public event
-    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname, Player.image_file)\
+    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.id, Player.name, Player.surname, Player.image_file)\
         .filter(Participants.player == Player.id)
     fields = Field.query.all()
     clubs = Club.query.all()
@@ -352,7 +352,7 @@ def past_events():
         if current_user.urole == 'Club':
             return redirect(url_for('club.club_home'))
     player = Player.query.filter_by(user_id=current_user.id).first()
-    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname, Player.image_file)\
+    participants = db.session.query(Participants, Player).add_columns(Participants.booking, Player.id, Player.name, Player.surname, Player.image_file)\
         .filter(Participants.player == Player.id)
     fields = Field.query.all()
     clubs = Club.query.all()

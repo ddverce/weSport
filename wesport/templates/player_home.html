@@ -22,15 +22,15 @@
                             {% endfor %}
                         </div>
                         <div class="col-6">
-                            <!--Google map-->
-                            <div id="map-container-google-8" class="z-depth-1-half map-container-5" style="height: 200px">
-                              <iframe src="https://maps.google.com/maps?q=Barcelona&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                frameborder="0" style="border:0" allowfullscreen></iframe>
-                            </div>
                             {% for field in fields %}
                                 {% if field.id == event.field_id  %}
                                     {% for club in clubs %}
                                         {% if club.id == field.club_id %}
+                                            <!--Google map-->
+                                            <div id="map{{ event.id }}" class="z-depth-1-half map-container-5" style="height: 200px">
+                                              <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBCNB6dLAqToK9fbYsZKIHxreBLPGcn9so&q={{ club.lat }},{{ club.lon }}&zoom=16"
+                                                frameborder="0" style="border:0" allowfullscreen></iframe>
+                                            </div>
                                             <small>
                                                 <p class="article-content">{{ club.name }} - {{ field.field_name }}</p>
                                             </small>
@@ -58,21 +58,23 @@
                                     {% if participants.booking == event.id %}
                                         <div>
                                             <img class="rounded-circle" width="30" height="30" src={{ url_for('static', filename='profile_pics/' + participants.image_file) }}>
-                                            <small class="article-content">{{ participants.name }} {{ participants.surname }}</small>
+                                            <small>
+                                                <a class="article-title" href="{{ url_for('player.players', player_id=participants.id) }}">{{ participants.name }} {{ participants.surname }}</a>
+                                            </small>
                                         </div>
                                     {% endif %}
                                 {% endfor %}
                             </div>
                             <div class="col-6">
-                                <!--Google map-->
-                                <div id="map-container-google-8" class="z-depth-1-half map-container-5" style="height: 200px">
-                                  <iframe src="https://maps.google.com/maps?q=Barcelona&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                    frameborder="0" style="border:0" allowfullscreen></iframe>
-                                </div>
                                 {% for field in fields %}
                                     {% if field.id == event.field_id  %}
                                         {% for club in clubs %}
                                             {% if club.id == field.club_id %}
+                                                <!--Google map-->
+                                                <div id="map{{ event.id }}" class="z-depth-1-half map-container-5" style="height: 200px">
+                                                  <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBCNB6dLAqToK9fbYsZKIHxreBLPGcn9so&q={{ club.lat }},{{ club.lon }}&zoom=16"
+                                                    frameborder="0" style="border:0" allowfullscreen></iframe>
+                                                </div>
                                                 <small>
                                                     <p class="article-content">{{ club.name }} - {{ field.field_name }}</p>
                                                 </small>

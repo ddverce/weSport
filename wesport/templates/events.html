@@ -5,28 +5,41 @@
         <div class="content-section-scroll" style="height: 600px">
             {% for event in events %}
                 <div class="content-section">
-                    <h2><a class="article-title" href="{{  url_for('player.event', event_id=event.id) }}" target="_blank">Event : {{  event.title }}</a></h2>
-                    {% for field in fields %}
-                        {% if field.id == event.field_id  %}
-                            {% for club in clubs %}
-                                {% if club.id == field.club_id %}
-                                    <small>
-                                        <p class="article-content">{{ club.name }} - {{ field.field_name }}</p>
-                                    </small>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
-                    <p class="article-content">Date: {{ event.date.strftime("%d-%m-%Y") }}</p>
-                    <p class="article-content">Start Time: {{ event.startTime }}</p>
-                    {% for participants in participants %}
-                        {% if participants.booking == event.id %}
-                            <div>
-                                <img class="rounded-circle" width="30" height="30" src={{ url_for('static', filename='profile_pics/' + participants.image_file) }}>
-                                <small class="article-content">{{ participants.name }} {{ participants.surname }}</small>
+                    <div class="row">
+                            <div class="col-6">
+                                <h2><a class="article-title" href="{{  url_for('player.event', event_id=event.id) }}">{{  event.title }}</a></h2>
+                                <p class="article-content">Date: {{ event.date.strftime("%d-%m-%Y") }}</p>
+                                <p class="article-content">Start Time: {{ event.startTime }}</p>
+                                {% for participants in participants %}
+                                    {% if participants.booking == event.id %}
+                                        <div>
+                                            <img class="rounded-circle" width="30" height="30" src={{ url_for('static', filename='profile_pics/' + participants.image_file) }}>
+                                            <small>
+                                                <a class="article-title" href="{{ url_for('player.players', player_id=participants.id) }}">{{ participants.name }} {{ participants.surname }}</a>
+                                            </small>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
-                        {% endif %}
-                    {% endfor %}
+                            <div class="col-6">
+                                {% for field in fields %}
+                                    {% if field.id == event.field_id  %}
+                                        {% for club in clubs %}
+                                            {% if club.id == field.club_id %}
+                                                <!--Google map-->
+                                                <div id="map{{ event.id }}" class="z-depth-1-half map-container-5" style="height: 200px">
+                                                  <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBCNB6dLAqToK9fbYsZKIHxreBLPGcn9so&q={{ club.lat }},{{ club.lon }}&zoom=16"
+                                                    frameborder="0" style="border:0" allowfullscreen></iframe>
+                                                </div>
+                                                <small>
+                                                    <p class="article-content">{{ club.name }} - {{ field.field_name }}</p>
+                                                </small>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                    </div>
                 </div>
             {% endfor %}
         </div>
