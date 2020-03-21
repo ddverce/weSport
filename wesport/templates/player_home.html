@@ -51,6 +51,8 @@
                 {% endfor %}
                 <p class="article-content">Date: {{ event.date.strftime("%d-%m-Y") }}</p>
                 <p class="article-content">Start Time: {{ event.startTime }}</p>
+                <p class="article-content">Participants: </p>
+                <div class="border 3pt rounded list-participants">
                 {% for participants in participants %}
                     {% if participants.booking == event.id %}
                         <div class="image-event-list">
@@ -59,6 +61,7 @@
                         </div>
                     {% endif %}
                 {% endfor %}
+            </div>
             </div>
         {% endfor %}
     </fieldset>
@@ -80,6 +83,8 @@
                 {% endfor %}
                 <p class="article-content">Date: {{ event.date.strftime("%d-%m-Y") }}</p>
                 <p class="article-content">Start Time: {{ event.startTime }}</p>
+                <p class="article-content">Participants: </p>
+                <div class="border 3pt rounded list-participants">
                 {% for participants in participants %}
                     {% if participants.booking == event.id %}
                         <div class="image-event-list">
@@ -89,7 +94,9 @@
                     {% endif %}
                 {% endfor %}
             </div>
+            </div>
         {% endfor %}
+
     </fieldset>
 {% endblock content %}
 {% block right_content %}
