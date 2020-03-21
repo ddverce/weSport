@@ -88,11 +88,9 @@ a.article-title:hover {
 
 .media{
   width: 200px;
-  text-overflow: ellipsis;
 }
 
 .media-body{
-  text-overflow: ellipsis;
   width: 200px
 }
 
