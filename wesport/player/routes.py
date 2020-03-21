@@ -180,17 +180,21 @@ def event(event_id):
     booking = Booking.query.get_or_404(event_id)
     player_user = Player.query.filter_by(user_id=current_user.id).first()
     participants = Participants.query.filter_by(booking=booking.id).all()
-    players = db.session.query(Participants, Player).add_columns(Participants.booking, Player.name, Player.surname, Player.image_file) \
+    players = db.session.query(Participants, Player).add_columns(Participants.booking, Player.id, Player.name, Player.surname, Player.image_file) \
         .filter(Participants.player == Player.id).filter(Participants.booking == event_id)
     field = Field.query.filter_by(id=booking.field_id).first()
     club = Club.query.filter_by(id=field.club_id).first()
     player_status = 0
+    booker = User.query.filter_by(id=booking.booker_id).first()
     for part in participants:
         if player_user.id == part.player:
             player_status = 1
-    booker = User.query.filter_by(id=booking.booker_id).first()
-    return render_template('event.html', title=booking.title, booking=booking, booker=booker.id, player_status=player_status, posts=posts,
+    if player_status == 1:
+        return render_template('event.html', title=booking.title, booking=booking, booker=booker.id, player_status=player_status, posts=posts,
                            players=players, club=club, field=field, form=form, time_now=time_now)
+    else:
+        return render_template('event_out.html', title=booking.title, booking=booking, booker=booker.id,
+                               player_status=player_status, players=players, club=club, field=field, form=form, time_now=time_now)
 
 
 @player.route("/event/<int:event_id>/join", methods=['POST'])

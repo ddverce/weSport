@@ -159,3 +159,11 @@ def field(club_id, sport):
 
     return jsonify({'fields': field_list})
 
+
+@club.route("/club_profile/<int:club_id>", methods=['GET', 'POST'])
+def club_profile(club_id):
+    club = Club.query.filter_by(id=club_id).first()
+    user = User.query.filter_by(id=club.user_id).first()
+    image_file = url_for('static', filename='profile_pics/' + club.image_file)
+    return render_template('club.html', title=club.name, club=club, user=user, image_file=image_file)
+

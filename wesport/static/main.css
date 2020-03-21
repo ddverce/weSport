@@ -89,7 +89,7 @@ a.article-title:hover {
     background-color: #fdfdfe;
 }
 
-.list-group-item-personal:hover{
+.list-group-item-personal:hover, .list-group-item-selected:hover{
   color: #fafafa;
   background-color: #dd8000;
 }
@@ -156,6 +156,22 @@ width:300px;
 position:absolute;
 }
 
+.map-container-6{
+overflow:hidden;
+padding-top:10px;
+padding-left: 10px;
+padding-bottom:unset;
+position:relative;
+
+}
+.map-container-6 iframe{
+left:0;
+top:0;
+height:300px;
+width:450px;
+position:absolute;
+}
+
 .content-section-post {
     height: 400px;
     overflow-y: scroll;
@@ -164,4 +180,8 @@ position:absolute;
     border: 1px solid #dddddd;
     border-radius: 3px;
     margin-bottom: 10px;
+}
+
+.button-padding {
+    padding-top: 10px;
 }
