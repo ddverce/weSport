@@ -123,10 +123,10 @@ def new_booking(location):  # i need to pass a parameter because i need to pass 
         for bookingcollision in bookingcollisions:
             # [a, b] overlaps with [x, y] iff b > x and a < y
             if form.start_time.data < bookingcollision.endTime and (form.start_time.data + form.duration.data) > bookingcollision.startTime:
-                flash('The time from is already booked.', 'danger')
+                flash('The time slot is already booked.', 'danger')
                 print (bookingcollision.startTime,
                        bookingcollision.endTime)  # Player.query.filter_by(id=bookingcollision.booker_id).first().name, Player.query.filter_by(id=bookingcollision.booker_id).first().surname)
-                return redirect(url_for('player.new_booking'))
+                return redirect(url_for('player.new_booking', location=location))
 
         # make booking
         booker = current_user

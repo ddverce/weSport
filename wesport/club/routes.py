@@ -123,6 +123,9 @@ def cancel_booking(booking_id):  # to be tested
     club = Club.query.filter_by(user_id=current_user.id).first()
     print (player.name, player.surname, field.field_name, booking.date, booking.startTime, user.email)
     send_cancellation_email_club(club.name, field.field_name, booking.date.strftime("%d/%m/%y"), booking.startTime, user.email)
+    posts = Post.query.filter_by(event=booking_id)
+    for post in posts:
+        db.session.delete(post)
     db.session.delete(booking)
     db.session.commit()
     flash('Your booking has been deleted!', 'success')
