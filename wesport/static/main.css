@@ -183,6 +183,5 @@ a.article-title:hover {
 
 .image-event-list{
     margin-bottom: 2px;
-    padding-left: 2px;
-    padding-top: 2px;
+    padding:3px;
 }

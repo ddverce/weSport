@@ -53,7 +53,7 @@
                 <p class="article-content">Start Time: {{ event.startTime }}</p>
                 {% for participants in participants %}
                     {% if participants.booking == event.id %}
-                        <div>
+                        <div class="image-event-list">
                             <img class="rounded-circle" width="30" height="30" src={{ url_for('static', filename='profile_pics/' + participants.image_file) }}>
                             <small class="article-content">{{ participants.name }} {{ participants.surname }}</small>
                         </div>
@@ -93,7 +93,7 @@
     </fieldset>
 {% endblock content %}
 {% block right_content %}
-    <h3>My Sidebar</h3>
+    <!--<h3>My Sidebar</h3>-->
         <div class="media">
             <img class="rounded-circle account-img" src="{{ image_file }}">
             <div class="media-body">
