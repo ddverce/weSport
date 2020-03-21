@@ -3,38 +3,88 @@
     <fieldset class="form-group">
         <legend class="border-bottom mb-4">Your fields</legend>
         {% for field in fields %}
-            <div>
-                <h2><a class="article-title" href="#">{{ field.field_name }}</a></h2>
-                <p class="article-content">Sport: {{ field.sport }}</p>
-                <p class="article-content">Max Players: {{ field.max_people }}</p>
+            <div class="row">
+                <div class="col-10">
+                    <h2><a class="article-title" href="{{  url_for('club.myfield', field_id=field.id) }}">{{ field.field_name }}</a></h2>
+                    <p class="article-content">Sport: {{ field.sport }}</p>
+                    <p class="article-content">Max Players: {{ field.max_people }}</p>
+                </div>
+                <div class="article-metadata col-2" style="border-bottom: none">
+                  <div>
+                    <button type=button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal{{ field.id }}">Delete</button>
+                  </div>
+                </div>
+                 <!-- Modal -->
+                <div class="modal fade" id="deleteModal{{ field.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete Field?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form action="{{ url_for('club.cancel_field', field_id=field.id) }}" method="POST">
+                            <input class="btn btn-danger" type="submit" value="Delete">
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </div>
         {% endfor %}
     </fieldset>
     <fieldset class="form-group">
         <legend class="border-bottom mb-4">Your Bookings</legend>
         {% for booking in bookings %}
-            <div>
-                <h2><a class="article-title" href="{{  url_for('club.booking', booking_id=booking.id) }}" target="_blank">{{ booking.field_name}}</a></h2>
-                <p class="article-content">Date : {{ booking.date.strftime("%d-%m-%Y") }}</p>
-                <p class="article-content">From {{ booking.startTime }} to {{ booking.endTime }}</p>
+            <div class="row">
+                <div class="col-10">
+                    <h2><a class="article-title" href="{{  url_for('club.booking', booking_id=booking.id) }}">{{ booking.title }}</a></h2>
+                    <p class="article-content">{{ booking.field_name}}</p>
+                    <p class="article-content">Date : {{ booking.date.strftime("%d-%m-%Y") }}</p>
+                    <p class="article-content">From {{ booking.startTime }} to {{ booking.endTime }}</p>
+                </div>
+                <div class="article-metadata col-2" style="border-bottom: none">
+                    <div>
+                        <button type=button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModalBooking{{ booking.id }}">Delete</button>
+                    </div>
+                </div>
+                 <!-- Modal -->
+                <div class="modal fade" id="deleteModalBooking{{ booking.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete Event?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form action="{{ url_for('club.cancel_booking', booking_id=booking.id) }}" method="POST">
+                            <input class="btn btn-danger" type="submit" value="Delete">
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </div>
         {% endfor %}
     </fieldset>
 {% endblock content %}
 {% block right_content %}
-    <h3>My Sidebar</h3>
-        <div class="media">
-            <img class="rounded-circle account-img" src="{{ image_file }}">
-            <div class="media-body">
-              <h2 class="account-heading">{{current_user.username}}</h2>
-              <p class="text-secondary">{{ current_user.email }}</p>
-            </div>
+    <div class="media">
+        <img class="rounded-circle account-img" src="{{ image_file }}">
+        <div class="media-body">
+          <h2 class="account-heading">{{current_user.username}}</h2>
+          <p class="text-secondary">{{ club.name }}</p>
+          <p class="text-secondary">{{ current_user.email }}</p>
         </div>
-        <ul class="list-group">
-            <a class="list-group-item list-group-item-light" href="{{ url_for('club.add_field') }}">Add Field</a>
-            <li class="list-group-item list-group-item-light">Latest Posts</li>
-            <li class="list-group-item list-group-item-light">Announcements</li>
-            <li class="list-group-item list-group-item-light">Calendars</li>
-            <a class="list-group-item list-group-item-light" href="{{ url_for('main.account') }}">Settings</a>
-        </ul>
+    </div>
+    <ul class="list-group">
+        <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('club.add_field') }}">Add Field</a>
+        <a class="list-group-item list-group-item-action list-group-item-personal" href="{{ url_for('main.account') }}">Settings</a>
+    </ul>
 {% endblock %}

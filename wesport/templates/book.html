@@ -106,7 +106,9 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.players }}
+                            <div class="content-section-scroll-player">
+                                {{ form.players(class="form-check", style="list-style: none")}}
+                            </div>
                         {% endif %}
                     </div>
                 </fieldset>
@@ -115,6 +117,12 @@
                 </div>
             </form>
             <script>
+                document.addEventListener("DOMContentLoaded", function(event) {
+                        let optionHTML = '<option value="0">---select option---</option>';
+                        club_select.innerHTML = optionHTML;
+                        field_select.innerHTML = optionHTML;
+                    });
+
                 let sport_select = document.getElementById('sport');
                 let club_select = document.getElementById('club');
                 let field_select = document.getElementById('field');
@@ -122,9 +130,10 @@
                 sport_select.onchange = function () {
                     sport = sport_select.value;
 
+                    let optionHTML = '<option value="0">---select option---</option>';
+                    field_select.innerHTML = optionHTML;
                     fetch('/clubs/' + sport).then(function (response) {
                         response.json().then(function (data) {
-                            let optionHTML = '<option value="0">---select option---</option>';
 
                             for (let club of data.clubs) {
                                 optionHTML += '<option value="' + club.id + '">' + club.name + '</option>';
@@ -157,47 +166,6 @@
 {% block right_content %}
     <h4>Club Map</h4>
         <div id="map"></div>
-        <script> // to be modified and improved
-              var lat = {{ lat }};
-              var lon = {{ lon }};
-              var markers = {{ markers }};
-              var marker, i;
-              var map;
-              var infowindow = new google.maps.InfoWindow();
-
-              function initMap() {
-
-                  // Map Options
-                  var options = {
-                      center: {lat: lat, lng: lon},
-                      zoom: 13
-                  };
-
-                  // New map
-                  map = new google.maps.Map(document.getElementById('map'), options);
-
-                  // add multiple markers
-                  for (i = 0; i < markers.length; i++) {
-                      marker = new google.maps.Marker({
-                          position: new google.maps.LatLng(markers[i][0], markers[i][1]),
-                          map: map
-                      });
-
-                      google.maps.event.addListener(marker, 'click', (function(marker) {
-                      return function() {
-                          var infoWindow = new google.maps.InfoWindow({
-                                content:props.content
-                          });
-
-                          marker.addListener('click', function(){
-                                infoWindow.open(map, marker);
-                          });
-                      }
-                      })(marker));
-                  }
-              }
-        </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNB6dLAqToK9fbYsZKIHxreBLPGcn9so&callback=initMap" async defer></script>
         <form method="post" action="">
             {{ address.hidden_tag() }}
             <fieldset class="form-group">
@@ -241,5 +209,44 @@
                 </div>
             </fieldset>
         </form>
+        <script> // to be modified and improved
+              var lat = {{ lat }};
+              var lon = {{ lon }};
+              var markers = {{ markers }};
+              var contents = {{ contents|tojson }};
+              var marker, i;
+              var map;
+              var infowindow = new google.maps.InfoWindow();
+
+              function initMap() {
+
+                  // Map Options
+                  var options = {
+                      center: {lat: lat, lng: lon},
+                      zoom: 6
+                  };
+
+                  // New map
+                  map = new google.maps.Map(document.getElementById('map'), options);
+
+                  // add multiple markers
+                  for (i = 0; i < markers.length; i++) {
+                      marker = new google.maps.Marker({
+                          position: new google.maps.LatLng(markers[i][0], markers[i][1]),
+                          map: map,
+                          content: contents[i].name
+                      });
+                      google.maps.event.addListener(marker, 'click', (function(marker) {
+                        return function() {
+                            var infoWindow = new google.maps.InfoWindow({
+                                content: this.content
+                            });
+                            infoWindow.open(map, marker);
+                        }
+                      })(marker));
+                  }
+              }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNB6dLAqToK9fbYsZKIHxreBLPGcn9so&callback=initMap" async defer></script>
 {% endblock %}
 
