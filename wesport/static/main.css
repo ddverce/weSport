@@ -88,10 +88,11 @@ a.article-title:hover {
 
 .media{
   width: 200px;
+    height:auto;
 }
 
 .media-body{
-  width: 200px
+  width: 200px;
 }
 
 .foot-home {
@@ -109,11 +110,6 @@ a.article-title:hover {
     position: relative;
     width: 100%;
     max-width: 1125px;
-}
-
-.container img {
-    width: 100%;
-    height: auto;
 }
 
 .container .btn-left {
@@ -183,4 +179,10 @@ a.article-title:hover {
 
 #under-register{
     width: 400px;
+}
+
+.image-event-list{
+    margin-bottom: 2px;
+    padding-left: 2px;
+    padding-top: 2px;
 }
