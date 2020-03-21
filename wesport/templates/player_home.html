@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <h2>Hello {{ player.name}}, {{ player.surname }} !</h2> <br>
+    <h1>Hello <b>{{ player.name}}, {{ player.surname }} </b>!</h1> <br>
     <fieldset class="form-group">
-        <legend class="border-bottom mb-4">My Bookings</legend>
+        <h2 class="border-bottom mb-4 pb-1">My Bookings</h2>
         {% for event in bookings %}
             <div class="content-section">
-                <h2><a class="article-title" href="{{  url_for('player.event', event_id=event.id) }}" target="_blank">Event : {{  event.title }}</a></h2>
+                <h3><a class="article-title" href="{{  url_for('player.event', event_id=event.id) }}" target="_blank">Event : {{  event.title }}</a></h3>
                 {% for field in fields %}
                     {% if field.id == event.field_id  %}
                         {% for club in clubs %}
@@ -20,10 +20,10 @@
                 <p class="article-content">Date: {{ event.date.strftime("%d-%m-%Y") }}</p>
                 <p class="article-content">Start Time: {{ event.startTime }}</p>
                 <p class="article-content">Participants: </p>
-                <div class="border 3-pt"  style="height:6.5rem; overflow-y: scroll;">
+                <div class="border 3pt rounded list-participants">
                 {% for participants in participants %}
                     {% if participants.booking == event.id %}
-                        <div>
+                        <div class="image-event-list">
                             <img class="rounded-circle" width="30" height="30" src={{ url_for('static', filename='profile_pics/' + participants.image_file) }}>
                             <small class="article-content">{{ participants.name }} {{ participants.surname }}</small>
                         </div>
@@ -34,7 +34,7 @@
         {% endfor %}
     </fieldset>
     <fieldset class="form-group">
-        <legend class="border-bottom mb-4">My Events</legend>
+        <h2 class="border-bottom mb-4 pb-1">My Events</h2>
         {% for event in myevents %}
             <div class="content-section">
                 <h2><a class="article-title" href="{{  url_for('player.event', event_id=event.id) }}" target="_blank">Event : {{  event.title }}</a></h2>
@@ -63,7 +63,7 @@
         {% endfor %}
     </fieldset>
     <fieldset class="form-group">
-        <legend class="border-bottom mb-4">Public events</legend>
+        <h2 class="border-bottom mb-4 pb-1">Public events</h2>
         {% for event in events %}
             <div class="content-section">
                 <h2><a class="article-title" href="{{  url_for('player.event', event_id=event.id) }}" target="_blank">Event : {{  event.title }}</a></h2>

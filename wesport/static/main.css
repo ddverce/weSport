@@ -185,3 +185,14 @@ a.article-title:hover {
     margin-bottom: 2px;
     padding:3px;
 }
+
+.list-participants{
+    border: 3pt;
+    height:4.5rem;
+    overflow-y: scroll;
+}
+
+.home img{
+    width: 100%;
+    height: auto;
+}
