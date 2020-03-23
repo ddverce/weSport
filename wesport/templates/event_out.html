@@ -85,8 +85,11 @@
     </div>
     <div class="row">
         <div class="col-6">
-            <p>Club: {{ club.name }}</p>
-            <p>Field: {{ field.field_name }}</p>
+            <a class="article-title" href="{{ url_for('club.club_profile', club_id=club.id) }}">Club: {{ club.name }}</a>
+            <p class="article-content">Field: {{ field.field_name }}</p>
+            <p class="article-content">Sport: {{ field.sport }}</p>
+            <p class="article-content">Date: {{ booking.date.strftime("%d-%m-%Y") }}</p>
+            <p class="article-content">Start Time: {{ booking.startTime }}</p>
         </div>
         <div class="col-6">
             <!--Google map-->

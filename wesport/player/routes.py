@@ -110,6 +110,7 @@ def new_booking(location):  # i need to pass a parameter because i need to pass 
             return redirect(url_for('club.club_home'))
         player_booker = Player.query.filter_by(user_id=current_user.id).first()
         form = BookingForm()
+        address = CurrentAddressForm()
         club_choices = [('0', '---select option---')]+[(club.id, club.name) for club in Club.query.all()]
         field_choices = [('0', '---select option---')]+[(field.id, field.field_name) for field in Field.query.all()]
         form.club.choices = club_choices  # we can add the fact that we display only the club of the city with the function get_city
@@ -141,22 +142,26 @@ def new_booking(location):  # i need to pass a parameter because i need to pass 
 
         booking_id = Booking.query.filter_by(booker_id=booker.id).order_by(Booking.id.desc()).first().id
         booker_participants = Participants(booking=booking_id, player=player_booker.id)
-        db.session.add(booker_participants)
         participants_user = form.players.data
         print participants_user
-
+        if len(participants_user) > (field.max_people - 1):
+            db.session.delete(booking)
+            db.session.commit()
+            flash('You need to select max ' + str(field.max_people - 1) + ' players', 'danger')
+            return render_template('book.html', title='Book', form=form, lat=lat, lon=lon, markers=markers,
+                                   address=address, latlon=latlon, near_club=near_club, contents=contents)
+        db.session.add(booker_participants)
         if participants_user:
             # Add participants records
             for participant in participants_user:
                 participating = Participants(booking=booking_id, player=participant)
                 db.session.add(participating)
-
         db.session.commit()
 
         flash('Booking processed with success!', 'success')
 
         return redirect(url_for("player.player_home"))
-    address = CurrentAddressForm()
+
     mylocation = {'lat': 45, 'lon': 45}  # initialize the dict for location
     if address.validate_on_submit():
         mylocation['lat'], mylocation['lon'] = geocode(address.address.data + ',' + address.city.data)  # pass the latlon coordinates if submitted

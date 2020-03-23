@@ -1,10 +1,55 @@
 {% extends 'layout_fullpage.html' %}
 {% block content %}
-    <div class="media">
-        <img class="rounded-circle account-img" src="{{ image_file }}">
-        <div class="media-body">
-          <h2 class="account-heading">{{player.name}} {{player.surname}}</h2>
-          <p class="text-secondary">{{ user.email }}</p>
+    <div class="row justify-content-center">
+        <div class="content-section col-8" xmlns="http://www.w3.org/1999/html">
+              <div class="media">
+                <img class="rounded-circle account-img" src="{{ image_file }}">
+                <div class="media-body">
+                  <h2 class="account-heading">{{current_user.username}}</h2>
+                  <p class="text-secondary">{{ current_user.email }}</p>
+                </div>
+              </div>
+                <form method="POST" action="" enctype="multipart/form-data">
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Account Info</legend>
+                        <div class="form-group">
+                            <label class="form-control-label">Name</label>
+                            <div class="form-control form-control-lg">
+                                {{ player.name }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Surname</label>
+                            <div class="form-control form-control-lg">
+                                {{ player.surname }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Gender</label>
+                            <div class="form-control form-control-lg">
+                                {{ player.gender }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Country</label>
+                            <div class="form-control form-control-lg">
+                                {{ player.country }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Phone number</label>
+                            <div class="form-control form-control-lg">
+                                {{ player.phone_number }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Subscription date</label>
+                            <div class="form-control form-control-lg">
+                                {{ player.subscription_date }}
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
         </div>
     </div>
 {% endblock %}

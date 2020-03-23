@@ -1,6 +1,7 @@
-{% extends "layout.html" %}
+{% extends "layout_fullpage.html" %}
 {% block content %}
-        <div class="content-section">
+    <div class="row justify-content-center">
+        <div class="content-section col-10">
             <form method="post" action="">
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
@@ -24,4 +25,5 @@
                 </div>
             </form>
         </div>
+    </div>
 {% endblock content %}

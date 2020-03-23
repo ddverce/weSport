@@ -8,6 +8,11 @@
                     <div class="row">
                             <div class="col-6">
                                 <h2><a class="article-title" href="{{  url_for('player.event', event_id=event.id) }}">{{  event.title }}</a></h2>
+                                {% for field in fields %}
+                                    {% if field.id == event.field_id %}
+                                        <p class="article-content">Sport: {{ field.sport }}</p>
+                                    {% endif %}
+                                {% endfor %}
                                 <p class="article-content">Date: {{ event.date.strftime("%d-%m-%Y") }}</p>
                                 <p class="article-content">Start Time: {{ event.startTime }}</p>
                                 {% for participants in participants %}
@@ -32,7 +37,7 @@
                                                     frameborder="0" style="border:0" allowfullscreen></iframe>
                                                 </div>
                                                 <small>
-                                                    <p class="article-content">{{ club.name }} - {{ field.field_name }}</p>
+                                                    <a class="article-title " href="{{ url_for('club.club_profile', club_id=club.id) }}">{{ club.name }} - {{ field.field_name }}</a>
                                                 </small>
                                             {% endif %}
                                         {% endfor %}
