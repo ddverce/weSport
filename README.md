@@ -12,21 +12,21 @@ To run the app you need to have Python 2.7.17 downloaded into your local machine
 
 ### List of libraries
 
-Datetime
-Flask
-Flask-Bcrypt
-Flask-Login
-Flask-Mail
-Falsk-SQLAlchemy
-Flask-WTF
-Jinja2
-Pillow
-SQLAlchemy
-WTForms
-Werkzeug
-Requests
-pip 
-Itsdangerous
+* Datetime
+* Flask
+* Flask-Bcrypt
+* Flask-Login
+* Flask-Mail
+* Falsk-SQLAlchemy
+* Flask-WTF
+* Jinja2
+* Pillow
+* SQLAlchemy
+* WTForms
+* Werkzeug
+* Requests
+* pip 
+* Itsdangerous
 
 ### Installing
 
@@ -36,7 +36,7 @@ To install a library you need to open python from your local Terminal and digit 
 pip install <name of the library>
 ```
 
-And repeat until all the librarie are installed
+And repeat until all the libraries are installed
 
 Example
 ```
