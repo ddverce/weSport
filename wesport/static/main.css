@@ -140,6 +140,11 @@ element.style {
     overflow-y: scroll;
 }
 
+.content-section-scroll-clubs {
+    height: 100px;
+    overflow-y: scroll;
+}
+
 .map-container-5{
 overflow:hidden;
 padding-top:10px;
@@ -187,3 +192,8 @@ position:absolute;
 }
 
 .space { padding-top: 80px; }
+
+.about-image {
+    height: 115px;
+    width: 85px;
+}

@@ -172,11 +172,13 @@
                 {% if latlon == 'nolocation' %}
                 {% else %}
                     <legend class="border-bottom mb-4">Clubs closer to you</legend>
+                    <div class="content-section-scroll-clubs">
                         <ul>
                             {% for club in near_club %}
                                 <li>{{ club.name }} , {{ club.distance }}m</li>
                             {% endfor %}
                         </ul>
+                    </div>
                 {% endif %}
                 <div class="form-group">
                     {{ address.city.label(class="form-control-label") }}

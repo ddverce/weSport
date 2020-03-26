@@ -172,20 +172,21 @@ def new_booking(location):  # i need to pass a parameter because i need to pass 
 @player.route("/event/<int:event_id>", methods=['GET', 'POST'])
 def event(event_id):
     time_now = datetime.now()
-    posts = db.session.query(Post, Player).add_columns(Post.id, Post.event, Post.date_posted, Post.content, Player.name, Player.surname, Player.image_file)\
+    posts = db.session.query(Post, Player)\
+        .add_columns(Post.id, Post.event, Post.date_posted, Post.content, Player.name, Player.surname, Player.image_file)\
         .filter(Post.player_id == Player.id).filter(Post.event == event_id)
     form = PostForm()
     if form.validate_on_submit():
         post = Post(player_id=Player.query.filter_by(user_id=current_user.id).first().id, event=event_id, content=form.content.data)
         db.session.add(post)
         db.session.commit()
-        flash('Your post has been created!', 'success')
         return redirect(url_for('player.event', event_id=event_id))
     print posts
     booking = Booking.query.get_or_404(event_id)
     player_user = Player.query.filter_by(user_id=current_user.id).first()
     participants = Participants.query.filter_by(booking=booking.id).all()
-    players = db.session.query(Participants, Player).add_columns(Participants.booking, Player.id, Player.name, Player.surname, Player.image_file) \
+    players = db.session.query(Participants, Player)\
+        .add_columns(Participants.booking, Player.id, Player.name, Player.surname, Player.image_file) \
         .filter(Participants.player == Player.id).filter(Participants.booking == event_id)
     field = Field.query.filter_by(id=booking.field_id).first()
     club = Club.query.filter_by(id=field.club_id).first()
