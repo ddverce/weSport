@@ -1,87 +1,60 @@
 # Wesport
 
-One Paragraph of project description goes here
+A web-app coded to let people organise with other people, book fields to club regitered in our platform and have fun playing the sport they like!
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+To run the app first download the files on your computer from this Git Repository.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+To run the app you need to have Python 2.7.17 downloaded into your local machine. If you don't have it you need to downloaded before running the project. In addition to the Python interpreter you need to be sure to have a list of libraries downloaded on your local machine. The list is provided in the following section and each of them can be easilly installing following the "Library installing" procedure in section after.
 
-```
-Give examples
-```
+### List of libraries
+
+Datetime
+Flask
+Flask-Bcrypt
+Flask-Login
+Flask-Mail
+Falsk-SQLAlchemy
+Flask-WTF
+Jinja2
+Pillow
+SQLAlchemy
+WTForms
+Werkzeug
+Requests
+pip 
+Itsdangerous
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+To install a library you need to open python from your local Terminal and digit the following command replacing <name of the library> with the library of interest:
 
 ```
-Give the example
+pip install <name of the library>
 ```
 
-And repeat
+And repeat until all the librarie are installed
 
+Example
 ```
-until finished
+pip install Datetime
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Flask](https://flask.palletsprojects.com/en/1.1.x/) - The web framework used
+* [Bootstrap](https://getbootstrap.com/docs/4.1/getting-started/introduction/) - Front end templates  
+* [SQLAlchemy](https://docs.sqlalchemy.org/en/13/) - Database Management
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* **Davide Vercellone** - *IT Developer* 
+* **Matteo Babini** - *IT Developer* 
+* **Alberto Molinar** - *Business Developer* 
+* **Tommaso Sacchi** - *Business Developer* 
+* **Anas Khalique** - *Business Developer* 
+* **Abdullah Ashfaq** - *Business Developer* 
