@@ -2,6 +2,8 @@
 
 A web-app coded to let people organise with other people, book fields to club regitered in our platform and have fun playing the sport they like!
 
+WeSports platform is dedicated to both sport players and Clubs. Through a dedicated landing page, players can create their own profile with some basic information about themselves. Club managers can do the same as they can register their own club on WeSports and add some essential information such as the name of the club, the address, the phone number and the fields they have at disposal (e.g. the sport it’s possible to play there).
+
 ## Getting Started
 
 To run the app first download the files on your computer from this Git Repository.
