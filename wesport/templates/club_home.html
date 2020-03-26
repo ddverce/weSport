@@ -2,6 +2,7 @@
 {% block content %}
     <fieldset class="form-group">
         <legend class="border-bottom mb-4">Your fields</legend>
+        <div class="content-section-scroll">
         {% for field in fields %}
             <div class="row">
                 <div class="col-10">
@@ -35,9 +36,11 @@
                 </div>
             </div>
         {% endfor %}
+        </div>
     </fieldset>
     <fieldset class="form-group">
         <legend class="border-bottom mb-4">Your Bookings</legend>
+        <div class="content-section-scroll">
         {% for booking in bookings %}
             <div class="row">
                 <div class="col-10">
@@ -72,6 +75,7 @@
                 </div>
             </div>
         {% endfor %}
+        </div>  
     </fieldset>
 {% endblock content %}
 {% block right_content %}

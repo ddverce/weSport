@@ -137,12 +137,15 @@ def clubs(sport):
     fields = Field.query.filter_by(sport=sport).all()
 
     club_list = []
+    club_id_list = []
 
     for field in fields:
         clubObj = {}
         clubObj['id'] = field.club_id
         clubObj['name'] = Club.query.filter_by(id=field.club_id).first().name
-        club_list.append(clubObj)
+        if field.club_id not in club_id_list:
+            club_id_list.append(field.club_id)
+            club_list.append(clubObj)
 
     return jsonify({'clubs': club_list})
 
