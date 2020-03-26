@@ -45,6 +45,13 @@ Example
 pip install Datetime
 ```
 
+### Run
+
+When it's finished the installing procedure open and run the file "run.py" to run the application. The fast way to do it is to open you terminal from the directory where wesport project is saved and dial
+```
+python run.py
+```
+
 ## Built With
 
 * [Flask](https://flask.palletsprojects.com/en/1.1.x/) - The web framework used
