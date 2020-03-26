@@ -22,13 +22,11 @@ app.config['MAIL_PASSWORD'] = 'Wesport!'
 mail = Mail(app)
 
 from wesport.main.routes import main
-from wesport.testing.routes import test
 from wesport.player.routes import player
 from wesport.club.routes import club
 
 
 app.register_blueprint(main)
-app.register_blueprint(test)
 app.register_blueprint(player)
 app.register_blueprint(club)
 
