@@ -118,11 +118,11 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
-    player_id = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=False)
+    player_id = db.Column(db.Integer, db.ForeignKey('playPer.id'), nullable=False)
     event = db.Column(db.Integer, db.ForeignKey('booking.id'), nullable=False)
 
     def __repr__(self):
-        content = "Post(%s , %s)" % (self.title, self.date_posted)
+        content = ("%s , %s , %s") % (self.player_id, self.date_posted, self.event)
         return content.encode("urf-8")
 
 
