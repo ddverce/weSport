@@ -19,7 +19,7 @@ def about():
     return render_template('about.html', title='About')
 
 
-@main.route("/register")
+@main.route("/register")  # deprecated
 def register():
     return render_template('choose_user.html', title='Choose User')
 
@@ -36,7 +36,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
-            next_page = request.args.get('next')
+            next_page = request.args.get('next')  # i used this because when i try to access a page and i'm not logged in it is saved in the the key next
             if current_user.is_authenticated:
                 if user.urole == "Club":
                     return redirect(next_page) if next_page else redirect(url_for('club.club_home'))
